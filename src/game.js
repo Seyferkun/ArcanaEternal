@@ -1,9 +1,13 @@
 // Arcana Eternal — Core Game Engine
 // Phase 1: Card combat system, map generation, game state machine
 
-const canvas = document.getElementById('game');
-const ctx = canvas.getContext('2d');
-const ui = document.getElementById('ui-layer');
+let canvas, ctx, ui;
+
+function init() {
+  canvas = document.getElementById('game');
+  ctx = canvas.getContext('2d');
+  ui = document.getElementById('ui-layer');
+}
 
 // --- CONSTANTS ---
 const CARD_W = 140, CARD_H = 200;
@@ -476,9 +480,7 @@ function enterNode(node, index) {
     const pool = typeMap.elite;
     startCombat(pool[Math.floor(Math.random() * pool.length)]);
   } else if (node.type === 'boss') {
-    co
-
-nst pool = typeMap.boss;
+    const pool = typeMap.boss;
     startCombat(pool[Math.floor(Math.random() * pool.length)]);
   } else if (node.type === 'rest') {
     state = 'rest';
