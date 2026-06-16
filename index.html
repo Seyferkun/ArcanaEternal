@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arcana Eternal</title>
+<title>Arcana Eternal v2</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { background: #0b0f19; color: #f1f5f9; font-family: 'Segoe UI', sans-serif; overflow: hidden; }
@@ -17,31 +17,21 @@ var canvas = document.getElementById('game');
 var ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-
-// Draw background
 ctx.fillStyle = '#0b0f19';
 ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-// Draw title
 ctx.fillStyle = '#fbbf24';
 ctx.font = 'bold 48px Segoe UI';
 ctx.textAlign = 'center';
 ctx.fillText('ARCANA ETERNAL', canvas.width/2, canvas.height/2 - 40);
-
-// Draw subtitle
 ctx.fillStyle = '#64748b';
 ctx.font = '18px Segoe UI';
 ctx.fillText('Roguelike Deckbuilder Card Game', canvas.width/2, canvas.height/2 + 10);
-
-// Draw button
 ctx.fillStyle = '#6366f1';
 ctx.fillRect(canvas.width/2 - 100, canvas.height/2 + 60, 200, 50);
 ctx.fillStyle = '#fff';
 ctx.font = 'bold 20px Segoe UI';
 ctx.fillText('NOVO JOGO', canvas.width/2, canvas.height/2 + 92);
-
-console.log('Game loaded successfully!');
-console.log('Canvas size:', canvas.width, 'x', canvas.height);
+console.log('Game loaded! Canvas:', canvas.width, 'x', canvas.height);
 </script>
 </body>
 </html>
