@@ -9,10 +9,8 @@
 <body>
 <canvas id="game"></canvas>
 <div id="ui-layer"></div>
-<script src="assets.js?v=2"></script>
-<script src="game.js?v=2"></script>
-<script src="content.js?v=2"></script>
-<script src="effects.js?v=2"></script>
+<script src="assets.js"></script>
+<script src="game-v2.js"></script>
 <script>
 window.addEventListener('DOMContentLoaded', function() {
   try {
@@ -22,8 +20,6 @@ window.addEventListener('DOMContentLoaded', function() {
       loadAssets(function() {
         if (typeof render === 'function') render();
       });
-    } else {
-      if (typeof render === 'function') render();
     }
   } catch(e) {
     console.error('INIT ERROR:', e.message, e.stack);
