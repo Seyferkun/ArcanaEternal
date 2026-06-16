@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "version": "0.1",
+    "game": "ArcanaEternal",
+    "totalEnemies": 21,
+    "lastUpdated": "2026-06-16"
+  },
+  "enemies": [
+    {"id": "E001", "name": "Goblin", "type": "Basic", "hp": [12, 18], "intents": [{"action": "attack", "damage": 6}, {"action": "buff", "strength": 2}], "art": "goblin.png"},
+    {"id": "E002", "name": "Skeleton", "type": "Basic", "hp": [15, 20], "intents": [{"action": "attack", "damage": 8}, {"action": "heal", "amount": 5}], "art": "skeleton.png"},
+    {"id": "E003", "name": "Slime", "type": "Basic", "hp": [20, 30], "intents": [{"action": "attack", "damage": 4, "effect": "poison_2"}, {"action": "split"}], "art": "slime.png"},
+    {"id": "E004", "name": "Wolf", "type": "Basic", "hp": [10, 15], "intents": [{"action": "attack", "damage": 7}, {"action": "summon", "ally": "Wolf"}], "art": "wolf.png"},
+    {"id": "E005", "name": "Dark Mage", "type": "Basic", "hp": [18, 25], "intents": [{"action": "attack", "damage": 10}, {"action": "debuff", "weak": 2}], "art": "dark_mage.png"},
+    {"id": "E006", "name": "Golem", "type": "Basic", "hp": [30, 40], "intents": [{"action": "attack", "damage": 12}, {"action": "block", "amount": 10}], "art": "golem.png"},
+    {"id": "E007", "name": "Orc", "type": "Basic", "hp": [20, 30], "intents": [{"action": "attack", "damage": 9}, {"action": "buff", "strength": 3}], "art": "orc.png"},
+    {"id": "E008", "name": "Harpy", "type": "Basic", "hp": [12, 18], "intents": [{"action": "attack", "damage": 6}, {"action": "debuff", "draw_denial": 1}], "art": "harpy.png"},
+    {"id": "E009", "name": "Ghost", "type": "Basic", "hp": [15, 22], "intents": [{"action": "attack", "damage": 5, "effect": "grave_1"}, {"action": "untouchable", "turns": 1}], "art": "ghost.png"},
+    {"id": "E010", "name": "Fire Elemental", "type": "Basic", "hp": [20, 28], "intents": [{"action": "attack", "damage": 8, "effect": "burn_2"}, {"action": "aoe", "damage": 3, "hits": 3}], "art": "fire_elemental.png"},
+    {"id": "E011", "name": "Spider", "type": "Basic", "hp": [15, 20], "intents": [{"action": "attack", "damage": 5, "effect": "poison_2"}, {"action": "debuff", "weak": 2}], "art": "spider.png"},
+    {"id": "E012", "name": "Bandit", "type": "Basic", "hp": [14, 19], "intents": [{"action": "attack", "damage": 6}, {"action": "steal", "gold": 5}], "art": "bandit.png"},
+    {"id": "E013", "name": "Treant", "type": "Basic", "hp": [25, 35], "intents": [{"action": "attack", "damage": 10}, {"action": "heal", "amount": 5}], "art": "treant.png"},
+    {"id": "E014", "name": "Merman", "type": "Basic", "hp": [18, 24], "intents": [{"action": "attack", "damage": 8}, {"action": "aoe", "damage": 6}], "art": "merman.png"},
+    {"id": "E015", "name": "Dark Knight", "type": "Elite", "hp": [50, 65], "intents": [{"action": "attack", "damage": 15}, {"action": "block", "amount": 12}, {"action": "debuff", "vulnerable": 2}], "art": "dark_knight.png"},
+    {"id": "E016", "name": "Red Dragon", "type": "Boss", "hp": 150, "phases": 2, "intents_p1": [{"action": "attack", "damage": 20}, {"action": "aoe", "damage": 10}, {"action": "debuff", "weak": 2}], "intents_p2": [{"action": "attack", "damage": 25}, {"action": "aoe", "damage": 15}, {"action": "buff", "strength": 5}], "art": "boss_dragon.png"},
+    {"id": "E017", "name": "Lich King", "type": "Boss", "hp": 120, "phases": 2, "intents_p1": [{"action": "attack", "damage": 18}, {"action": "summon", "ally": "Skeleton"}, {"action": "debuff", "grave": 2}], "intents_p2": [{"action": "aoe", "damage": 8}, {"action": "heal", "amount": 20}, {"action": "attack", "damage": 22}], "art": "boss_lich.png"},
+    {"id": "E018", "name": "Demon Lord", "type": "Boss", "hp": 180, "phases": 2, "intents_p1": [{"action": "attack", "damage": 25}, {"action": "debuff", "vulnerable": 3}, {"action": "buff", "strength": 3}], "intents_p2": [{"action": "aoe", "damage": 15}, {"action": "heal", "amount": 30}, {"action": "attack", "damage": 30}], "art": "boss_demon.png"}
+  ]
+}
