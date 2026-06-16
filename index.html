@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arcana Eternal</title>
+<title>Arcana Eternal v2</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,7 +12,6 @@
 <script src="assets.js"></script>
 <script src="game.js"></script>
 <script>
-// Inline init to avoid dependency issues
 window.addEventListener('DOMContentLoaded', function() {
   try {
     if (typeof init === 'function') init();
@@ -25,7 +24,7 @@ window.addEventListener('DOMContentLoaded', function() {
       if (typeof render === 'function') render();
     }
   } catch(e) {
-    console.error('INIT ERROR:', e.message, e.stack);
+    document.body.innerHTML = '<h1 style="color:red;padding:40px">Erro: ' + e.message + '</h1>';
   }
 });
 </script>
