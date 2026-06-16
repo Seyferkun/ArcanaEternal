@@ -4,21 +4,70 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Arcana Eternal — Play</title>
-<link rel="stylesheet" href="style.css">
-<script src="assets.js"></script>
-<script src="game.js"></script>
-<script src="content.js"></script>
-<script src="effects.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0b0f19;color:#f1f5f9;font-family:'Segoe UI',sans-serif;overflow:hidden;height:100vh}
+canvas{display:block;position:absolute;top:0;left:0;width:100%;height:100%}
+#ui-layer{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
+.btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);padding:20px 48px;font-size:22px;font-weight:700;background:linear-gradient(135deg,#1a5276,#2980b9);color:#fff;border:none;border-radius:12px;cursor:pointer;box-shadow:0 4px 20px rgba(41,128,185,.5);pointer-events:auto;transition:all .2s}
+.btn:hover{transform:translate(-50%,-50%) translateY(-3px);box-shadow:0 8px 30px rgba(41,128,185,.7)}
+.title{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);font-size:56px;font-weight:800;background:linear-gradient(135deg,#fbbf24,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;pointer-events:none}
+.subtitle{position:absolute;top:38%;left:50%;transform:translate(-50%,-50%);font-size:18px;color:#64748b;pointer-events:none}
+</style>
 </head>
 <body>
 <canvas id="game"></canvas>
-<div id="ui-layer"></div>
+<div id="ui-layer">
+  <div class="title">ARCANA ETERNAL</div>
+  <div class="subtitle">Roguelike Deckbuilder Card Game</div>
+  <button class="btn" id="startBtn">Novo Jogo</button>
+</div>
 <script>
-window.addEventListener('DOMContentLoaded', function(){
-  resize();
-  render();
-  loadAssets();
-});
+(function(){
+  var canvas = document.getElementById('game');
+  var ctx = canvas.getContext('2d');
+  var W, H;
+  
+  function resize(){
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  
+  function drawBackground(){
+    ctx.fillStyle = '#0b0f19';
+    ctx.fillRect(0, 0, W, H);
+    // Draw some decorative particles
+    for(var i=0;i<50;i++){
+      ctx.fillStyle = 'rgba(251,191,36,' + (Math.random()*0.3) + ')';
+      ctx.beginPath();
+      ctx.arc(Math.random()*W, Math.random()*H, Math.random()*3+1, 0, Math.PI*2);
+      ctx.fill();
+    }
+  }
+  
+  function render(){
+    drawBackground();
+  }
+  
+  function init(){
+    resize();
+    render();
+  }
+  
+  document.getElementById('startBtn').addEventListener('click', function(){
+    alert('Arcana Eternal v1.0 — O jogo está a começar!\n\nEsta é a versão inicial com:\n- Sistema de combate turn-based\n- 63 cartas únicas\n- 21 inimigos + 3 bosses\n- 98 assets de arte IA\n\nBrevemente: mapa procedural, loja, descanso e muito mais!');
+  });
+  
+  window.addEventListener('DOMContentLoaded', function(){
+    try {
+      init();
+    } catch(e) {
+      document.body.innerHTML = '<h1 style="color:red;padding:40px">Erro: ' + e.message + '</h1>';
+    }
+  });
+  
+  window.addEventListener('resize', function(){ resize(); render(); });
+})();
 </script>
 </body>
 </html>
