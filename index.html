@@ -3,21 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arcana Eternal — Play</title>
+<title>Arcana Eternal</title>
 <link rel="stylesheet" href="style.css">
-<script src="assets.js"></script>
-<script src="game.js"></script>
-<script src="content.js"></script>
-<script src="effects.js"></script>
 </head>
 <body>
 <canvas id="game"></canvas>
 <div id="ui-layer"></div>
+<script src="assets.js"></script>
+<script src="game.js"></script>
 <script>
-window.addEventListener('DOMContentLoaded', function(){
-  resize();
-  render();
-  loadAssets();
+// Inline init to avoid dependency issues
+window.addEventListener('DOMContentLoaded', function() {
+  try {
+    if (typeof init === 'function') init();
+    if (typeof resize === 'function') resize();
+    if (typeof loadAssets === 'function') {
+      loadAssets(function() {
+        if (typeof render === 'function') render();
+      });
+    } else {
+      if (typeof render === 'function') render();
+    }
+  } catch(e) {
+    console.error('INIT ERROR:', e.message, e.stack);
+  }
 });
 </script>
 </body>
