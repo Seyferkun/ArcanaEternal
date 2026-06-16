@@ -11,19 +11,21 @@
 <div id="ui-layer"></div>
 <script src="assets.js"></script>
 <script src="game.js"></script>
-<script src="content.js"></script>
-<script src="effects.js"></script>
 <script>
+// Inline init to avoid dependency issues
 window.addEventListener('DOMContentLoaded', function() {
   try {
-    init();
-    resize();
-    loadAssets(function() {
-      render();
-    });
+    if (typeof init === 'function') init();
+    if (typeof resize === 'function') resize();
+    if (typeof loadAssets === 'function') {
+      loadAssets(function() {
+        if (typeof render === 'function') render();
+      });
+    } else {
+      if (typeof render === 'function') render();
+    }
   } catch(e) {
     console.error('INIT ERROR:', e.message, e.stack);
-    document.body.innerHTML = '<div style="position:fixed;top:0;left:0;right:0;bottom:0;background:#0b0f19;color:#e74c3c;padding:40px;z-index:9999;overflow:auto"><h1>Erro</h1><pre>' + e.message + '\n\n' + e.stack + '</pre></div>';
   }
 });
 </script>
