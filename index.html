@@ -3,64 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arcana Eternal — Test</title>
-<style>
-body { margin: 0; background: #0b0f19; color: #f1f5f9; font-family: 'Segoe UI', sans-serif; overflow: hidden; }
-canvas { display: block; }
-</style>
+<title>Arcana Eternal — Play</title>
+<link rel="stylesheet" href="style.css">
+<script src="assets.js"></script>
+<script src="game.js"></script>
+<script src="content.js"></script>
+<script src="effects.js"></script>
+<script src="updates.js"></script>
 </head>
 <body>
 <canvas id="game"></canvas>
+<div id="ui-layer"></div>
 <script>
-const canvas = document.getElementById('game');
-const ctx = canvas.getContext('2d');
-
-function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-
-function render() {
-  // Clear
-  ctx.fillStyle = '#0b0f19';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-  // Title
-  ctx.fillStyle = '#6366f1';
-  ctx.font = 'bold 48px Segoe UI';
-  ctx.textAlign = 'center';
-  ctx.fillText('ARCANA', canvas.width/2, canvas.height/2 - 80);
-  
-  ctx.fillStyle = '#10b981';
-  ctx.fillText('ETERNAL', canvas.width/2, canvas.height/2 - 20);
-  
-  ctx.fillStyle = '#64748b';
-  ctx.font = '18px Segoe UI';
-  ctx.fillText('Roguelike Deckbuilder — Loading...', canvas.width/2, canvas.height/2 + 30);
-  
-  // Start button
-  ctx.fillStyle = '#6366f1';
-  ctx.fillRect(canvas.width/2 - 100, canvas.height/2 + 80, 200, 50);
-  ctx.fillStyle = '#fff';
-  ctx.font = 'bold 20px Segoe UI';
-  ctx.fillText('NOVO JOGO', canvas.width/2, canvas.height/2 + 112);
-}
-
 resize();
 render();
-
-canvas.addEventListener('click', function(e) {
-  const x = e.clientX;
-  const y = e.clientY;
-  // Check if clicked on button
-  const btnX = canvas.width/2 - 100;
-  const btnY = canvas.height/2 + 80;
-  if (x >= btnX && x <= btnX + 200 && y >= btnY && y <= btnY + 50) {
-    ctx.fillStyle = '#10b981';
-    ctx.font = 'bold 24px Segoe UI';
-    ctx.fillText('Jogo a carregar...', canvas.width/2, canvas.height/2 + 160);
-  }
-});
+loadAssets();
 </script>
 </body>
 </html>
