@@ -16,16 +16,21 @@ function resize() {
 }
 
 function render() {
-  // Clear UI layer
+  // Dispatch to full render
   if (ui) ui.innerHTML = '';
-  
   ctx.fillStyle = '#0b0f19';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   
-  if (state === 'menu') {
-    renderMenu();
-  } else if (state === 'map') {
-    renderMap();
+  switch(state) {
+    case 'menu': renderMenu(); break;
+    case 'map': renderMap(); break;
+    case 'combat': renderCombat(); break;
+    case 'reward': renderReward(); break;
+    case 'shop': renderShop(); break;
+    case 'rest': renderRest(); break;
+    case 'event': renderEvent(); break;
+    case 'gameover': renderGameOver(); break;
+    case 'victory': renderVictory(); break;
   }
 }
 
@@ -773,23 +778,6 @@ function enterNode(node, index) {
   }
 }
 
-// --- RENDER DISPATCH ---
-function render() {
-  if (ui) ui.innerHTML = '';
-  ctx.fillStyle = '#0b0f19';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-  switch(state) {
-    case 'menu': renderMenu(); break;
-    case 'map': renderMap(); break;
-    case 'combat': renderCombat(); break;
-    case 'reward': renderReward(); break;
-    case 'shop': renderShop(); break;
-    case 'rest': renderRest(); break;
-    case 'event': renderEvent(); break;
-    case 'gameover': renderGameOver(); break;
-    case 'victory': renderVictory(); break;
-  }
-}
+// --- RENDER DISPATCH (removed duplicate) ---
 
 window.addEventListener('resize', resize);
