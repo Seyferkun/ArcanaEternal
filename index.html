@@ -14,8 +14,8 @@
 <canvas id="game"></canvas>
 <div id="ui-layer"></div>
 <script>
+window.addEventListener('error', function(e) { console.error('ERROR:', e.message, e.filename, e.lineno); });
 window.addEventListener('DOMContentLoaded', function(){
-  init();
   resize();
   render();
   loadAssets();
