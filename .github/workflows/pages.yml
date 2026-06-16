@@ -6,29 +6,30 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  contents: write
 
 jobs:
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: 'src'
+
+      - name: Prepare Pages content
+        run: |
+          mkdir -p public
+          cp src/index.html public/index.html
+          cp src/game.js public/game.js
+          cp src/content.js public/content.js
+          cp src/effects.js public/effects.js
+          cp src/assets.js public/assets.js
+          cp src/style.css public/style.css
+          cp -r assets public/assets
+          cp -r docs public/docs
+
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
