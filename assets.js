@@ -130,6 +130,33 @@ function getEnemySprite(enemyKey) {
 }
 
 function getCardArt(cardId) {
-  if (loadedAssets[cardId]) return loadedAssets[cardId];
+  // Map card IDs to asset file names
+  var artMap = {
+    'golpe_rapido': 'W01_strike',
+    'espadada': 'W02_defend',
+    'investida': 'W03_heavy_blow',
+    'escudo_reforcado': 'W04_shield_bash',
+    'foco': 'W05_battle_cry',
+    'fireball': 'BM01_fireball',
+    'ice_shard': 'BM02_ice_shard',
+    'thunder_bolt': 'BM03_thunder_bolt',
+    'quick_stab': 'T01_quick_stab',
+    'smoke_bomb': 'T02_smoke_bomb',
+    'backstab': 'T03_backstab',
+    'holy_light': 'WM01_holy_light',
+    'protect': 'WM02_protect',
+    'cure': 'WM03_cure',
+    'thrust': 'D01_thrust',
+    'jump': 'D02_jump',
+    'dragon_dive': 'D04_dragon_dive',
+    'soul_drain': 'DK01_soul_drain',
+    'dark_slash': 'DK02_dark_slash',
+    'blood_price': 'DK03_blood_price',
+    'song_of_courage': 'B01_song_of_courage',
+    'lullaby': 'B02_lullaby',
+    'melody_of_healing': 'B03_melody_of_healing'
+  };
+  var artKey = artMap[cardId] || cardId;
+  if (loadedAssets[artKey]) return loadedAssets[artKey];
   return null;
 }
