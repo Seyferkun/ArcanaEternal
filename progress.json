@@ -1,0 +1,162 @@
+{
+  "project": "ArcanaEternal",
+  "lastUpdated": "2026-06-16T02:10:00Z",
+  "phases": [
+    {
+      "id": 0,
+      "name": "Game Design Document (GDD)",
+      "owner": "VPS Hermes (orchestrator)",
+      "duration": "1-2 days",
+      "status": "not_started",
+      "progress": 0,
+      "tasks": [
+        {"id": "0.1", "name": "Write complete GDD with all mechanics defined", "status": "pending"},
+        {"id": "0.2", "name": "Design card list (minimum 60 cards for demo)", "status": "pending"},
+        {"id": "0.3", "name": "Design relic/modifier list (minimum 20)", "status": "pending"},
+        {"id": "0.4", "name": "Design enemy roster (15+ enemies, 3 elites, 3 bosses)", "status": "pending"},
+        {"id": "0.5", "name": "Design map node types and progression", "status": "pending"},
+        {"id": "0.6", "name": "Balance spreadsheet (damage curves, energy costs, scaling)", "status": "pending"}
+      ],
+      "deliverables": [
+        {"id": "0.D1", "name": "GDD.md in repo", "status": "pending"},
+        {"id": "0.D2", "name": "cards.json (full card database)", "status": "pending"},
+        {"id": "0.D3", "name": "enemies.json (enemy stats and AI patterns)", "status": "pending"},
+        {"id": "0.D4", "name": "balance_sheet.md", "status": "pending"}
+      ]
+    },
+    {
+      "id": 1,
+      "name": "Core Game Engine",
+      "owner": "VPS Hermes (code) + Laptop Hermes (testing)",
+      "duration": "3-5 days",
+      "status": "not_started",
+      "progress": 0,
+      "tasks": [
+        {"id": "1.1", "name": "HTML5 Canvas rendering engine", "status": "pending"},
+        {"id": "1.2", "name": "Game state machine (menu, map, combat, reward, shop, game over)", "status": "pending"},
+        {"id": "1.3", "name": "Card system (draw pile, discard pile, hand, exhaust)", "status": "pending"},
+        {"id": "1.4", "name": "Combat system (turn-based, energy, card play, enemy AI)", "status": "pending"},
+        {"id": "1.5", "name": "Map generation (procedural branching paths)", "status": "pending"},
+        {"id": "1.6", "name": "Reward screen (card pick after combat)", "status": "pending"},
+        {"id": "1.7", "name": "Shop system", "status": "pending"},
+        {"id": "1.8", "name": "Save/load (localStorage)", "status": "pending"},
+        {"id": "1.9", "name": "Basic UI layout and transitions", "status": "pending"}
+      ],
+      "deliverables": [
+        {"id": "1.D1", "name": "index.html (playable prototype)", "status": "pending"},
+        {"id": "1.D2", "name": "game.js (core engine)", "status": "pending"},
+        {"id": "1.D3", "name": "styles.css (basic styling)", "status": "pending"},
+        {"id": "1.D4", "name": "No art yet - use placeholder colored rectangles", "status": "pending"}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Art Generation Pipeline",
+      "owner": "Laptop Hermes (ComfyUI) + VPS Hermes (integration)",
+      "duration": "5-7 days",
+      "status": "not_started",
+      "progress": 0,
+      "tasks": [
+        {"id": "2.1", "name": "Set up ComfyUI workflow for card art generation", "status": "pending"},
+        {"id": "2.2", "name": "Create style reference sheet (5-10 images for consistency)", "status": "pending"},
+        {"id": "2.3", "name": "Generate card back design", "status": "pending"},
+        {"id": "2.4", "name": "Generate card frame/border templates", "status": "pending"},
+        {"id": "2.5", "name": "Generate character portraits (player characters)", "status": "pending"},
+        {"id": "2.6", "name": "Generate enemy sprites (all 15+ enemies)", "status": "pending"},
+        {"id": "2.7", "name": "Generate boss splash art (3 bosses)", "status": "pending"},
+        {"id": "2.8", "name": "Generate map/background scenes", "status": "pending"},
+        {"id": "2.9", "name": "Generate UI elements (icons, buttons, frames)", "status": "pending"},
+        {"id": "2.10", "name": "Generate card illustrations (batch process all 60+ cards)", "status": "pending"},
+        {"id": "2.11", "name": "Post-process and resize all assets to game specs", "status": "pending"}
+      ],
+      "deliverables": [
+        {"id": "2.D1", "name": "assets/cards/ (all card PNGs)", "status": "pending"},
+        {"id": "2.D2", "name": "assets/characters/ (portraits)", "status": "pending"},
+        {"id": "2.D3", "name": "assets/enemies/ (sprites + boss art)", "status": "pending"},
+        {"id": "2.D4", "name": "assets/ui/ (icons, frames, buttons)", "status": "pending"},
+        {"id": "2.D5", "name": "assets/backgrounds/ (map scenes)", "status": "pending"},
+        {"id": "2.D6", "name": "comfyui_workflow.json (reproducible pipeline)", "status": "pending"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Art Integration + Polish",
+      "owner": "VPS Hermes",
+      "duration": "3-4 days",
+      "status": "not_started",
+      "progress": 0,
+      "tasks": [
+        {"id": "3.1", "name": "Integrate card art into game engine", "status": "pending"},
+        {"id": "3.2", "name": "Integrate enemy sprites and boss art", "status": "pending"},
+        {"id": "3.3", "name": "Integrate UI elements and backgrounds", "status": "pending"},
+        {"id": "3.4", "name": "Add card hover/click animations", "status": "pending"},
+        {"id": "3.5", "name": "Add combat VFX (damage numbers, card play effects)", "status": "pending"},
+        {"id": "3.6", "name": "Sound effects placeholder integration", "status": "pending"},
+        {"id": "3.7", "name": "Responsive layout fixes", "status": "pending"},
+        {"id": "3.8", "name": "Cross-browser testing", "status": "pending"}
+      ],
+      "deliverables": [
+        {"id": "3.D1", "name": "Fully playable game with all art integrated", "status": "pending"},
+        {"id": "3.D2", "name": "Polished UI with animations", "status": "pending"},
+        {"id": "3.D3", "name": "Tested on Chrome, Firefox, Edge", "status": "pending"}
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Balance + Content Expansion",
+      "owner": "VPS Hermes + Laptop Hermes (playtesting)",
+      "duration": "3-5 days",
+      "status": "not_started",
+      "progress": 0,
+      "tasks": [
+        {"id": "4.1", "name": "Playtesting sessions (minimum 10 full runs)", "status": "pending"},
+        {"id": "4.2", "name": "Card balance pass (adjust costs, damage, effects)", "status": "pending"},
+        {"id": "4.3", "name": "Enemy difficulty tuning", "status": "pending"},
+        {"id": "4.4", "name": "Add 20+ new cards (expansion set)", "status": "pending"},
+        {"id": "4.5", "name": "Add 5 new enemies", "status": "pending"},
+        {"id": "4.6", "name": "Add 1 new boss", "status": "pending"},
+        {"id": "4.7", "name": "Add new relic types", "status": "pending"},
+        {"id": "4.8", "name": "Final balance spreadsheet update", "status": "pending"}
+      ],
+      "deliverables": [
+        {"id": "4.D1", "name": "Balanced card database v2", "status": "pending"},
+        {"id": "4.D2", "name": "Expanded enemy roster", "status": "pending"},
+        {"id": "4.D3", "name": "Playtest report with findings", "status": "pending"},
+        {"id": "4.D4", "name": "Final balance spreadsheet", "status": "pending"}
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Launch Preparation",
+      "owner": "VPS Hermes",
+      "duration": "2-3 days",
+      "status": "not_started",
+      "progress": 0,
+      "tasks": [
+        {"id": "5.1", "name": "GitHub Pages deployment setup", "status": "pending"},
+        {"id": "5.2", "name": "Final bug fixes and polish", "status": "pending"},
+        {"id": "5.3", "name": "README with gameplay instructions", "status": "pending"},
+        {"id": "5.4", "name": "Create itch.io page draft", "status": "pending"},
+        {"id": "5.5", "name": "Promo screenshots and GIFs", "status": "pending"},
+        {"id": "5.6", "name": "Social media announcement draft", "status": "pending"},
+        {"id": "5.7", "name": "Final full playthrough verification", "status": "pending"}
+      ],
+      "deliverables": [
+        {"id": "5.D1", "name": "Live game on GitHub Pages", "status": "pending"},
+        {"id": "5.D2", "name": "Complete README.md", "status": "pending"},
+        {"id": "5.D3", "name": "itch.io page ready", "status": "pending"},
+        {"id": "5.D4", "name": "Promo materials (screenshots, GIFs)", "status": "pending"}
+      ]
+    }
+  ],
+  "stats": {
+    "totalPhases": 6,
+    "totalTasks": 49,
+    "totalDeliverables": 25,
+    "completedTasks": 0,
+    "completedDeliverables": 0,
+    "estimatedDays": 17,
+    "startedAt": null,
+    "currentPhase": null
+  }
+}
