@@ -1,6 +1,8 @@
-/* Arcana Eternal — Final Fantasy Style UI */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lato:wght@300;400;700&display=swap');
+/* ============================================
+   ARCANA ETERNAL — Final Fantasy Style CSS
+   ============================================ */
 
+/* === CSS Variables === */
 :root {
   --bg: #0b0f19;
   --bg2: #151f32;
@@ -16,45 +18,103 @@
   --purple: #a855f7;
   --border: #1e293b;
   --glow: rgba(251, 191, 36, 0.3);
+  --font-title: 'Cinzel', serif;
+  --font-body: 'Lato', 'Segoe UI', sans-serif;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+/* === Reset === */
+* { margin: 0; padding: 0; box-sizing: box-border; }
 
 body {
-  font-family: 'Lato', 'Segoe UI', sans-serif;
+  font-family: var(--font-body);
   background: var(--bg);
   color: var(--text);
   overflow: hidden;
   height: 100vh;
   width: 100vw;
+  -webkit-font-smoothing: antialiased;
 }
 
-canvas {
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
+/* === Loading Screen === */
+#loading-screen {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.loading-content {
+  text-align: center;
+  width: 300px;
+}
+
+.loading-logo {
+  font-family: var(--font-title);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 30px;
+  text-shadow: 0 0 20px var(--glow);
+  letter-spacing: 3px;
+}
+
+.loading-bar {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+.loading-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 10px var(--glow);
+}
+
+.loading-text {
+  font-size: 13px;
+  color: var(--text-dim);
+  font-family: var(--font-body);
+}
+
+/* === Game Container === */
+#game-container {
+  position: relative;
   width: 100%;
   height: 100%;
+  display: none;
+}
+
+#game-canvas {
+  display: block;
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
 }
 
 #ui-layer {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   pointer-events: none;
 }
 
 #ui-layer > * { pointer-events: auto; }
 
-/* Buttons */
+/* === Buttons === */
 .btn {
-  padding: 16px 40px;
-  font-size: 18px;
+  padding: 14px 36px;
+  font-size: 16px;
   font-weight: 700;
-  font-family: 'Cinzel', serif;
+  font-family: var(--font-title);
   background: linear-gradient(135deg, var(--blue-dark), var(--blue));
   color: #fff;
   border: 2px solid var(--gold);
@@ -63,16 +123,35 @@ canvas {
   box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4), inset 0 1px 0 rgba(255,255,255,0.1);
   transition: all 0.3s ease;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+  transform: rotate(45deg);
+  transition: all 0.5s;
+}
+
+.btn:hover::before {
+  left: 100%;
 }
 
 .btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   box-shadow: 0 6px 30px rgba(99, 102, 241, 0.6), inset 0 1px 0 rgba(255,255,255,0.2);
-  border-color: var(--gold);
+  border-color: #fff;
 }
 
-.btn:active { transform: translateY(0); }
+.btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
+}
 
 .btn-gold {
   background: linear-gradient(135deg, var(--gold-dark), var(--gold));
@@ -90,18 +169,35 @@ canvas {
   border-color: #86efac;
 }
 
-/* Card styles */
+.btn-small {
+  padding: 8px 16px;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+/* === Cards === */
 .card {
   border-radius: 8px;
   border: 2px solid var(--gold);
   box-shadow: 0 4px 15px rgba(0,0,0,0.5);
   transition: all 0.2s ease;
   cursor: pointer;
+  position: relative;
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+  border-radius: 6px;
+  pointer-events: none;
 }
 
 .card:hover {
   transform: translateY(-8px) scale(1.05);
-  box-shadow: 0 8px 30px rgba(251, 191, 36, 0.4);
+  box-shadow: 0 8px 30px var(--glow);
   border-color: #fff;
 }
 
@@ -111,7 +207,12 @@ canvas {
   border-color: #333;
 }
 
-/* HP bar */
+.card.disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* === HP Bar === */
 .hp-bar {
   height: 12px;
   border-radius: 6px;
@@ -122,54 +223,73 @@ canvas {
 
 .hp-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #ef4444, #f87171);
+  background: linear-gradient(90deg, #991b1b, var(--red));
   transition: width 0.3s ease;
 }
 
-/* Energy display */
+.hp-bar-fill.green {
+  background: linear-gradient(90deg, #166534, var(--green));
+}
+
+/* === Energy Display === */
 .energy-display {
-  font-family: 'Cinzel', serif;
+  font-family: var(--font-title);
   font-size: 24px;
   font-weight: 700;
   color: var(--gold);
-  text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+  text-shadow: 0 0 10px var(--glow);
 }
 
-/* Node styles for map */
-.node-circle {
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  border: 3px solid var(--gold);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
+/* === Tooltip === */
+.tooltip {
+  position: fixed;
+  background: rgba(15, 23, 25, 0.95);
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  padding: 12px;
+  max-width: 250px;
+  z-index: 100;
+  pointer-events: none;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
 }
 
-.node-circle:hover {
-  transform: scale(1.15);
-  box-shadow: 0 0 30px rgba(251, 191, 36, 0.5);
+.tooltip-name {
+  font-family: var(--font-title);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 4px;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 8px; }
+.tooltip-type {
+  font-size: 10px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+.tooltip-desc {
+  font-size: 12px;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+/* === Scrollbar === */
+::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
-/* Animations */
+/* === Animations === */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes pulse {
-  0%, 100% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.3); }
-  50% { box-shadow: 0 0 40px rgba(251, 191, 36, 0.6); }
+  0%, 100% { box-shadow: 0 0 20px var(--glow); }
+  50% { box-shadow: 0 0 40px var(--glow); }
 }
 
 @keyframes glow {
@@ -177,6 +297,33 @@ canvas {
   50% { filter: brightness(1.3); }
 }
 
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
 .fade-in { animation: fadeIn 0.5s ease; }
 .pulse { animation: pulse 2s infinite; }
 .glow { animation: glow 1.5s infinite; }
+.float { animation: float 3s ease-in-out infinite; }
+
+/* === Responsive === */
+@media (max-width: 768px) {
+  .btn { padding: 12px 24px; font-size: 14px; }
+  .loading-logo { font-size: 18px; }
+}
+
+/* === Utility === */
+.hidden { display: none !important; }
+.text-center { text-align: center; }
+.text-gold { color: var(--gold); }
+.text-dim { color: var(--text-dim); }
+.text-red { color: var(--red); }
+.text-green { color: var(--green); }
+.mb-10 { margin-bottom: 10px; }
+.mb-20 { margin-bottom: 20px; }

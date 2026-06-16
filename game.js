@@ -46,13 +46,14 @@ const ENEMY_DB = {
 
 // --- INIT ---
 function init() {
-  canvas = document.getElementById('game');
+  canvas = document.getElementById('game-canvas');
   ctx = canvas.getContext('2d');
   ui = document.getElementById('ui-layer');
   resize();
 }
 
 function resize() {
+  if (!canvas) return;
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 }
@@ -79,64 +80,94 @@ function render() {
 
 // --- MENU ---
 function renderMenu() {
-  // Gradient background
-  const grad = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 0, canvas.width/2, canvas.height/2, canvas.width/2);
+  // Animated gradient background
+  const grad = ctx.createRadialGradient(
+    canvas.width/2 + Math.sin(Date.now()/1000)*50, 
+    canvas.height/2 + Math.cos(Date.now()/1000)*30, 
+    0, canvas.width/2, canvas.height/2, canvas.width/2
+  );
   grad.addColorStop(0, '#1a1a3e');
+  grad.addColorStop(0.5, '#0f1628');
   grad.addColorStop(1, '#0b0f19');
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   
-  // Particles
-  for(var i=0;i<50;i++){
-    ctx.fillStyle = 'rgba(251,191,36,' + (Math.random()*0.4) + ')';
+  // Floating particles
+  const t = Date.now() / 1000;
+  for(var i=0;i<60;i++){
+    const px = (Math.sin(t * 0.3 + i * 0.5) * 0.5 + 0.5) * canvas.width;
+    const py = (Math.cos(t * 0.2 + i * 0.7) * 0.5 + 0.5) * canvas.height;
+    const size = Math.sin(t + i) * 2 + 3;
+    const alpha = Math.sin(t * 0.5 + i) * 0.15 + 0.2;
+    ctx.fillStyle = `rgba(251,191,36,${alpha})`;
     ctx.beginPath();
-    ctx.arc(Math.random()*canvas.width, Math.random()*canvas.height, Math.random()*4+1, 0, Math.PI*2);
+    ctx.arc(px, py, size, 0, Math.PI*2);
     ctx.fill();
   }
   
-  // Decorative lines
-  ctx.strokeStyle = 'rgba(251,191,36,0.1)';
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(canvas.width/2 - 200, canvas.height/2 - 120);
-  ctx.lineTo(canvas.width/2 + 200, canvas.height/2 - 120);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(canvas.width/2 - 200, canvas.height/2 + 40);
-  ctx.lineTo(canvas.width/2 + 200, canvas.height/2 + 40);
-  ctx.stroke();
+  // Decorative frame
+  const cx = canvas.width/2, cy = canvas.height/2;
+  ctx.strokeStyle = 'rgba(251,191,36,0.15)';
+  ctx.lineWidth = 2;
+  // Top line
+  ctx.beginPath(); ctx.moveTo(cx-250, cy-140); ctx.lineTo(cx+250, cy-140); ctx.stroke();
+  // Bottom line  
+  ctx.beginPath(); ctx.moveTo(cx-250, cy+60); ctx.lineTo(cx+250, cy+60); ctx.stroke();
+  // Corner ornaments
+  const corners = [[cx-250,cy-140],[cx+250,cy-140],[cx-250,cy+60],[cx+250,cy+60]];
+  corners.forEach(([x,y]) => {
+    ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI*2); ctx.fillStyle = '#fbbf24'; ctx.fill();
+  });
   
   // Title with glow
   ctx.shadowColor = '#fbbf24';
-  ctx.shadowBlur = 20;
+  ctx.shadowBlur = 30;
   ctx.fillStyle = '#fbbf24';
-  ctx.font = 'bold 56px Cinzel, Segoe UI, serif';
+  ctx.font = 'bold 64px Cinzel, serif';
   ctx.textAlign = 'center';
-  ctx.fillText('ARCANA ETERNAL', canvas.width/2, canvas.height/2 - 80);
+  ctx.textBaseline = 'middle';
+  ctx.fillText('ARCANA', cx, cy - 100);
+  ctx.shadowBlur = 15;
+  ctx.fillStyle = '#10b981';
+  ctx.fillText('ETERNAL', cx, cy - 40);
   ctx.shadowBlur = 0;
   
   // Subtitle
   ctx.fillStyle = '#64748b';
-  ctx.font = '18px Lato, Segoe UI, sans-serif';
-  ctx.fillText('Roguelike Deckbuilder Card Game', canvas.width/2, canvas.height/2 - 30);
-  
-  // Version
-  ctx.fillStyle = '#444';
-  ctx.font = '12px Lato, Segoe UI, sans-serif';
-  ctx.fillText('v1.0 | 98 AI Art Assets | 7 Jobs | 63 Cards', canvas.width/2, canvas.height - 30);
+  ctx.font = '16px Lato, sans-serif';
+  ctx.fillText('Roguelike Deckbuilder Card Game', cx, cy + 10);
   
   // Button
   const btn = document.createElement('button');
-  btn.textContent = 'Novo Jogo';
-  btn.style.cssText = 'position:absolute;top:55%;left:50%;transform:translate(-50%,-50%);padding:20px 48px;font-size:22px;font-weight:700;font-family:Cinzel,serif;background:linear-gradient(135deg,#1a5276,#2980b9);color:#fff;border:2px solid #fbbf24;border-radius:12px;cursor:pointer;box-shadow:0 4px 20px rgba(41,128,185,.5);transition:all .2s';
-  btn.onmouseenter = () => { btn.style.transform = 'translate(-50%,-50%) translateY(-3px)'; btn.style.boxShadow = '0 8px 30px rgba(41,128,185,.7)'; };
-  btn.onmouseleave = () => { btn.style.transform = 'translate(-50%,-50%)'; btn.style.boxShadow = '0 4px 20px rgba(41,128,185,.5)'; };
+  btn.textContent = '✦ Novo Jogo ✦';
+  btn.style.cssText = `position:absolute;top:58%;left:50%;transform:translate(-50%,-50%);padding:18px 48px;font-size:20px;font-weight:700;font-family:Cinzel,serif;background:linear-gradient(135deg,#1a5276,#2980b9);color:#fff;border:2px solid #fbbf24;border-radius:12px;cursor:pointer;box-shadow:0 4px 25px rgba(41,128,185,0.5),inset 0 1px 0 rgba(255,255,255,0.1);transition:all .3s;letter-spacing:2px`;
+  btn.onmouseenter = () => { 
+    btn.style.transform = 'translate(-50%,-50%) translateY(-3px) scale(1.05)'; 
+    btn.style.boxShadow = '0 8px 35px rgba(41,128,185,0.7),inset 0 1px 0 rgba(255,255,255,0.2)';
+    btn.style.borderColor = '#fff';
+  };
+  btn.onmouseleave = () => { 
+    btn.style.transform = 'translate(-50%,-50%)'; 
+    btn.style.boxShadow = '0 4px 25px rgba(41,128,185,0.5),inset 0 1px 0 rgba(255,255,255,0.1)';
+    btn.style.borderColor = '#fbbf24';
+  };
+  btn.onmousedown = () => { btn.style.transform = 'translate(-50%,-50%) translateY(1px) scale(0.98)'; };
+  btn.onmouseup = () => { btn.style.transform = 'translate(-50%,-50%) translateY(-3px) scale(1.05)'; };
   btn.onclick = () => {
     runData = { floor:1, hp:70, maxHp:70, gold:50, deck: getStarterDeck(), relics:[], path: generateMap() };
     state = 'map';
     render();
   };
   ui.appendChild(btn);
+  
+  // Version footer
+  ctx.fillStyle = '#333';
+  ctx.font = '11px Lato, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('v1.0 | 113 AI Art Assets | 7 Jobs | 63 Cards | Made with ComfyUI + Juggernaut-X', cx, canvas.height - 25);
+  
+  // Request next frame for animation
+  if (state === 'menu') requestAnimationFrame(render);
 }
 
 function getStarterDeck() {

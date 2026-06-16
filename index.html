@@ -2,31 +2,128 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arcana Eternal v2</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Arcana Eternal — Roguelike Deckbuilder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<canvas id="game"></canvas>
-<div id="ui-layer"></div>
+
+<!-- Loading Screen -->
+<div id="loading-screen">
+  <div class="loading-content">
+    <div class="loading-logo">✦ ARCANA ETERNAL ✦</div>
+    <div class="loading-bar"><div class="loading-fill" id="loading-fill"></div></div>
+    <div class="loading-text" id="loading-text">Loading assets...</div>
+  </div>
+</div>
+
+<!-- Game Container -->
+<div id="game-container">
+  <canvas id="game-canvas"></canvas>
+  <div id="ui-layer"></div>
+</div>
+
+<!-- Templates (hidden) -->
+<template id="tooltip-template">
+  <div class="tooltip">
+    <div class="tooltip-name"></div>
+    <div class="tooltip-type"></div>
+    <div class="tooltip-desc"></div>
+  </div>
+</template>
+
 <script src="assets.js"></script>
 <script src="game.js"></script>
+<script src="content.js"></script>
+<script src="effects.js"></script>
 <script>
-window.addEventListener('DOMContentLoaded', function() {
+// ===== BOOT SEQUENCE =====
+(function() {
+  const loadingScreen = document.getElementById('loading-screen');
+  const loadingFill = document.getElementById('loading-fill');
+  const loadingText = document.getElementById('loading-text');
+  const gameContainer = document.getElementById('game-container');
+  
+  // Show loading screen
+  loadingScreen.style.display = 'flex';
+  gameContainer.style.display = 'none';
+  
+  // Initialize game
   try {
     if (typeof init === 'function') init();
     if (typeof resize === 'function') resize();
+    
+    // Load assets with progress
     if (typeof loadAssets === 'function') {
+      const totalAssets = Object.keys(ASSETS).length;
+      let loaded = 0;
+      
+      // Override loadAssets to track progress
+      const originalLoadAssets = loadAssets;
+      window.loadAssets = function(callback) {
+        const keys = Object.keys(ASSETS);
+        let count = 0;
+        
+        if (keys.length === 0) {
+          loadingFill.style.width = '100%';
+          loadingText.textContent = 'Ready!';
+          setTimeout(() => finishLoading(callback), 500);
+          return;
+        }
+        
+        keys.forEach(key => {
+          const img = new Image();
+          img.onload = img.onerror = () => {
+            loaded++;
+            const pct = Math.round((loaded / totalAssets) * 100);
+            loadingFill.style.width = pct + '%';
+            loadingText.textContent = 'Loading... ' + pct + '%';
+            
+            if (loaded >= totalAssets) {
+              loadingText.textContent = 'Ready!';
+              setTimeout(() => finishLoading(callback), 300);
+            }
+          };
+          img.src = ASSETS[key];
+        });
+      };
+      
       loadAssets(function() {
         if (typeof render === 'function') render();
       });
     } else {
-      if (typeof render === 'function') render();
+      setTimeout(() => finishLoading(), 500);
     }
+    
+    function finishLoading(callback) {
+      loadingScreen.style.opacity = '0';
+      loadingScreen.style.transition = 'opacity 0.5s';
+      gameContainer.style.display = 'block';
+      
+      setTimeout(() => {
+        loadingScreen.style.display = 'none';
+        if (callback) callback();
+      }, 500);
+    }
+    
   } catch(e) {
-    document.body.innerHTML = '<h1 style="color:red;padding:40px">Erro: ' + e.message + '</h1>';
+    console.error('Boot error:', e);
+    loadingText.textContent = 'Error: ' + e.message;
+    loadingFill.style.background = '#ef4444';
   }
-});
+  
+  // Prevent context menu on canvas
+  document.getElementById('game-canvas').addEventListener('contextmenu', e => e.preventDefault());
+  
+  // Handle visibility change (pause when tab hidden)
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      // Could pause animations here
+    }
+  });
+})();
 </script>
 </body>
 </html>

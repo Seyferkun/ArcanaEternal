@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arcana Eternal — Dev Dashboard</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0b0f19;color:#f1f5f9;min-height:100vh;padding:20px}
+h1{font-size:28px;color:#fbbf24;margin-bottom:8px}
+.subtitle{color:#64748b;font-size:14px;margin-bottom:30px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.card{background:#151f32;border:1px solid #1e293b;border-radius:12px;padding:20px}
+.card h2{font-size:18px;color:#fbbf24;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.card h2 .icon{font-size:20px}
+.progress-bar{height:8px;background:#1e293b;border-radius:4px;overflow:hidden;margin:8px 0}
+.progress-fill{height:100%;background:linear-gradient(90deg,#fbbf24,#f59e0b);border-radius:4px;transition:width 0.5s}
+.stat{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #1e293b;font-size:14px}
+.stat:last-child{border-bottom:none}
+.stat .label{color:#64748b}
+.stat .value{color:#f1f5f9;font-weight:600}
+.stat .value.done{color:#22c55e}
+.stat .value.wip{color:#fbbf24}
+.stat .value.todo{color:#64748b}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
+.badge.done{background:rgba(34,197,94,0.2);color:#22c55e}
+.badge.wip{background:rgba(251,191,36,0.2);color:#fbbf24}
+.badge.todo{background:rgba(100,116,139,0.2);color:#64748b}
+canvas{border:1px solid #1e293b;border-radius:8px;background:#000;margin-top:10px;width:100%;max-width:400px}
+.btn{display:inline-block;padding:8px 16px;background:#6366f1;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:14px;margin-top:10px}
+.btn:hover{background:#4f46e5}
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;margin-top:12px}
+.gallery img{width:100%;aspect-ratio:3/4;border-radius:4px;border:1px solid #1e293b;object-fit:cover}
+.gallery img:hover{border-color:#fbbf24;transform:scale(1.05);transition:all 0.2s}
+.log{background:#0b0f19;border:1px solid #1e293d;border-radius:6px;padding:10px;font-family:monospace;font-size:12px;max-height:200px;overflow-y:auto;margin-top:10px}
+.log-entry{padding:2px 0;border-bottom:1px solid #1e293b}
+.log-entry .time{color:#64748b}
+.log-entry .msg{color:#f1f5f9}
+.log-entry .msg.ok{color:#22c55e}
+.log-entry .msg.err{color:#ef4444}
+</style>
+</head>
+<body>
+
+<h1>🎮 Arcana Eternal — Dev Dashboard</h1>
+<p class="subtitle">Local development tracker — no GitHub dependency</p>
+
+<div class="grid">
+
+<!-- Game Preview -->
+<div class="card">
+  <h2><span class="icon">🕹️</span> Game Preview</h2>
+  <canvas id="game" width="400" height="300"></canvas>
+  <button class="btn" onclick="location.reload()">↻ Reload</button>
+  <button class="btn" onclick="toggleState()">Toggle State</button>
+</div>
+
+<!-- Progress -->
+<div class="card">
+  <h2><span class="icon">📊</span> Progress</h2>
+  <div class="stat"><span class="label">Overall</span><span class="value" id="overall-pct">0%</span></div>
+  <div class="progress-bar"><div class="progress-fill" id="overall-bar" style="width:0%"></div></div>
+  
+  <div class="stat"><span class="label">Art Assets</span><span class="value done" id="art-count">0</span></div>
+  <div class="stat"><span class="label">Card Arts</span><span class="value done" id="card-count">0</span></div>
+  <div class="stat"><span class="label">Enemy Sprites</span><span class="value done" id="enemy-count">0</span></div>
+  <div class="stat"><span class="label">Backgrounds</span><span class="value done" id="bg-count">0</span></div>
+  <div class="stat"><span class="label">UI Elements</span><span class="value done" id="ui-count">0</span></div>
+</div>
+
+<!-- Tasks -->
+<div class="card">
+  <h2><span class="icon">✅</span> Tasks</h2>
+  <div id="tasks"></div>
+</div>
+
+<!-- Asset Gallery -->
+<div class="card">
+  <h2><span class="icon">🎨</span> Card Art Gallery</h2>
+  <div class="gallery" id="gallery"></div>
+</div>
+
+<!-- Combat Test -->
+<div class="card">
+  <h2><span class="icon">⚔️</span> Combat Test</h2>
+  <canvas id="combat" width="400" height="250"></canvas>
+  <button class="btn" onclick="testCombat()">Test Combat</button>
+</div>
+
+<!-- Log -->
+<div class="card">
+  <h2><span class="icon">📝</span> Activity Log</h2>
+  <div class="log" id="log"></div>
+</div>
+
+</div>
+
+<script>
+// ===== GAME ENGINE (simplified for preview) =====
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+let state = 'menu';
+let frame = 0;
+
+const ASSETS = {
+  cards: [], enemies: [], backgrounds: [], ui: []
+};
+
+// Scan for local assets
+function scanAssets() {
+  // These will be populated by the server or manually
+  const cardDir = 'assets/cards/';
+  const enemyDir = 'assets/enemies/';
+  const bgDir = 'assets/backgrounds/';
+  const uiDir = 'assets/ui/';
+  
+  // Known assets (from our generation)
+  const knownCards = [
+    'card_back.png', 'card_frame_gold.png', 'card_frame_silver.png', 'card_frame_bronze.png',
+    'W01_strike.png', 'W02_defend.png', 'W03_heavy_blow.png', 'W04_shield_bash.png',
+    'W05_battle_cry.png', 'W07_whirlwind.png', 'W08_earthquake.png', 'W10_titans_wrath.png',
+    'BM01_fireball.png', 'BM02_ice_shard.png', 'BM03_thunder_bolt.png', 'BM04_arcane_missile.png',
+    'BM05_meditate.png', 'BM06_blizzard.png', 'BM07_meteor.png', 'BM08_mana_surge.png', 'BM10_ultima.png',
+    'T01_quick_stab.png', 'T02_smoke_bomb.png', 'T03_backstab.png', 'T05_dagger_throw.png',
+    'T06_shadow_step.png', 'T07_assassinate.png', 'T08_wind_dash.png', 'T10_eternal_night.png',
+    'WM01_holy_light.png', 'WM02_protect.png', 'WM03_cure.png', 'WM04_smite.png',
+    'WM05_prayer.png', 'WM06_divine_shield.png', 'WM07_holy.png', 'WM08_resurrection.png',
+    'D01_thrust.png', 'D02_jump.png', 'D03_polearm_slash.png', 'D04_dragon_dive.png',
+    'D05_spear_mastery.png', 'D06_impale.png', 'D07_dragoon_oath.png', 'D08_skyfall_spear.png',
+    'D09_lancet.png', 'D10_high_jump.png',
+    'DK01_soul_drain.png', 'DK02_dark_slash.png', 'DK03_blood_price.png',
+    'DK04_shadow_strike.png', 'DK05_dark_armor.png', 'DK06_soul_reaver.png',
+    'DK07_dark_pact.png', 'DK08_abyssal_blade.png', 'DK09_living_dead.png', 'DK10_chaos_dark.png',
+    'B01_song_of_courage.png', 'B02_lullaby.png', 'B03_melody_of_healing.png',
+    'B04_inspire.png', 'B06_battle_hymn.png', 'B07_sonic_boom.png',
+    'B08_encore.png', 'B09_symphony.png', 'B10_eternal_song.png',
+    'N01_arcane_intellect.png', 'N02_mana_burst.png',
+    'card_fire_01.png', 'card_fire_02.png', 'card_fire_03.png',
+    'card_ice_01.png', 'card_ice_02.png', 'card_ice_03.png',
+    'card_lightning_01.png', 'card_lightning_02.png',
+    'card_earth_01.png', 'card_earth_02.png',
+    'card_wind_01.png', 'card_wind_02.png',
+    'card_holy_01.png', 'card_holy_02.png',
+    'card_dark_01.png', 'card_dark_02.png',
+    'card_dark_abyssalblade.png', 'card_dark_livingdead.png', 'card_dark_soulreaver.png',
+    'card_warrior_strike_02.png', 'card_warrior_defend_02.png', 'card_warrior_battlecry.png',
+    'card_warrior_whirlwind.png', 'card_warrior_titanswrath.png',
+    'card_blackfire_meteor.png', 'card_blackfire_blizzard.png',
+    'card_blackfire_arcanemissile.png', 'card_blackfire_manasurge.png',
+    'card_thief_assassinate.png', 'card_thief_winddash.png',
+    'card_thief_shadowstep.png', 'card_thief_eternalnight.png',
+    'card_holy_resurrection.png', 'card_holy_divineshield.png',
+    'card_holy_smite.png', 'card_holy_prayer.png',
+    'card_dragoon_spearmastery.png', 'card_dragoon_impale.png', 'card_dragoon_skyfallspear.png',
+    'card_neutral_manaburst.png', 'card_neutral_arcaneintellect.png',
+    'card_bard_encore.png', 'card_bard_symphony.png', 'card_bard_battlehymn.png',
+  ];
+  
+  const knownEnemies = [
+    'goblin.png', 'skeleton.png', 'slime.png', 'wolf.png', 'dark_mage.png',
+    'golem.png', 'orc.png', 'harpy.png', 'ghost.png', 'fire_elemental.png',
+    'spider.png', 'bandit.png', 'treant.png', 'merman.png', 'dark_knight.png',
+    'boss_dragon.png', 'boss_lich.png', 'boss_demon.png',
+    'enemy_goblin_warrior.png', 'enemy_skeleton_knight.png', 'enemy_slime_king.png',
+    'enemy_wolf_beast.png', 'enemy_dark_mage.png', 'enemy_stone_golem.png',
+    'enemy_orc_berserker.png', 'enemy_harpy.png', 'enemy_ghost_wraith.png',
+    'enemy_fire_elemental.png', 'enemy_giant_spider.png', 'enemy_bandit_rogue.png',
+    'enemy_treant.png', 'enemy_merman_warrior.png', 'enemy_dark_knight.png',
+    'boss_lich_king.png', 'boss_red_dragon.png', 'boss_demon_lord.png',
+  ];
+  
+  const knownBgs = ['forest.jpg', 'desert.jpg', 'ice_cave.jpg', 'castle.jpg', 'netherworld.jpg',
+    'forest_enhanced.jpg', 'desert_enhanced.jpg', 'ice_cave_enhanced.jpg', 'castle_enhanced.jpg', 'netherworld_enhanced.jpg'];
+  const knownUi = ['icon_attack.png', 'icon_defense.png', 'icon_draw.png', 'icon_gold.png', 'icon_hp.png', 'icon_mana.png'];
+  
+  document.getElementById('card-count').textContent = knownCards.length;
+  document.getElementById('enemy-count').textContent = knownEnemies.length;
+  document.getElementById('bg-count').textContent = knownBgs.length;
+  document.getElementById('ui-count').textContent = knownUi.length;
+  document.getElementById('art-count').textContent = knownCards.length + knownEnemies.length + knownBgs.length + knownUi.length;
+  
+  // Populate gallery
+  const gallery = document.getElementById('gallery');
+  knownCards.slice(0, 20).forEach(c => {
+    const img = document.createElement('img');
+    img.src = cardDir + c;
+    img.title = c;
+    img.onerror = () => { img.style.display = 'none'; };
+    gallery.appendChild(img);
+  });
+  
+  // Calculate progress
+  const total = 10;
+  const done = 5; // menu, map, combat, rewards, art
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('overall-pct').textContent = pct + '%';
+  document.getElementById('overall-bar').style.width = pct + '%';
+}
+
+// ===== TASKS =====
+const tasks = [
+  { name: 'Menu principal', status: 'done' },
+  { name: 'Mapa com nós', status: 'done' },
+  { name: 'Sistema de combate', status: 'done' },
+  { name: 'Recompensas', status: 'done' },
+  { name: 'Loja / Descanso', status: 'done' },
+  { name: 'Deck viewer', status: 'wip' },
+  { name: 'Card frames melhorados', status: 'wip' },
+  { name: 'Animações e VFX', status: 'todo' },
+  { name: 'Sound effects', status: 'todo' },
+  { name: 'Balanceamento', status: 'todo' },
+];
+
+function renderTasks() {
+  const el = document.getElementById('tasks');
+  el.innerHTML = tasks.map(t => `
+    <div class="stat">
+      <span class="label">${t.name}</span>
+      <span class="badge ${t.status}">${t.status === 'done' ? '✓ Feito' : t.status === 'wip' ? '⚡ Em progresso' : '○ Pendente'}</span>
+    </div>
+  `).join('');
+}
+
+// ===== LOG =====
+const logs = [
+  { time: '14:32', msg: 'Card frames gerados (gold, silver, bronze)', ok: true },
+  { time: '14:28', msg: '113 card arts total', ok: true },
+  { time: '14:15', msg: 'Menu redesign: animated particles, split title', ok: true },
+  { time: '14:02', msg: 'CSS redesign: FF-style theme', ok: true },
+  { time: '13:55', msg: 'GDD, Style Guide, Asset List criados', ok: true },
+  { time: '13:50', msg: 'Divisão de tarefas: Laptop=Arte, VPS=Código', ok: true },
+];
+
+function renderLog() {
+  const el = document.getElementById('log');
+  el.innerHTML = logs.map(l => `
+    <div class="log-entry">
+      <span class="time">[${l.time}]</span>
+      <span class="msg ${l.ok ? 'ok' : 'err'}">${l.msg}</span>
+    </div>
+  `).join('');
+}
+
+// ===== GAME PREVIEW =====
+function renderMenu() {
+  const grad = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 0, canvas.width/2, canvas.height/2, canvas.width/2);
+  grad.addColorStop(0, '#1a1a3e');
+  grad.addColorStop(1, '#0b0f19');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  // Particles
+  for(var i=0;i<30;i++){
+    ctx.fillStyle = 'rgba(251,191,36,' + (Math.random()*0.3) + ')';
+    ctx.beginPath();
+    ctx.arc(Math.random()*canvas.width, Math.random()*canvas.height, Math.random()*3+1, 0, Math.PI*2);
+    ctx.fill();
+  }
+  
+  ctx.shadowColor = '#fbbf24';
+  ctx.shadowBlur = 15;
+  ctx.fillStyle = '#fbbf24';
+  ctx.font = 'bold 24px serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('ARCANA ETERNAL', canvas.width/2, canvas.height/2 - 20);
+  ctx.shadowBlur = 0;
+  
+  ctx.fillStyle = '#64748b';
+  ctx.font = '12px sans-serif';
+  ctx.fillText('Roguelike Deckbuilder', canvas.width/2, canvas.height/2 + 10);
+  
+  // Button
+  ctx.fillStyle = '#6366f1';
+  ctx.fillRect(canvas.width/2 - 60, canvas.height/2 + 30, 120, 35);
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 14px sans-serif';
+  ctx.fillText('Novo Jogo', canvas.width/2, canvas.height/2 + 52);
+}
+
+function renderMap() {
+  ctx.fillStyle = '#0b0f19';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  ctx.fillStyle = '#fbbf24';
+  ctx.font = 'bold 16px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Andar 1 / 3', canvas.width/2, 30);
+  
+  // Nodes
+  const colors = ['#e74c3c', '#3498db', '#2ecc71'];
+  const icons = ['⚔', '?', '♨'];
+  const labels = ['Combate', 'Evento', 'Descanso'];
+  
+  colors.forEach((c, i) => {
+    const x = canvas.width/2;
+    const y = 80 + i * 70;
+    
+    // Line
+    if(i > 0) {
+      ctx.strokeStyle = 'rgba(251,191,36,0.3)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([4,4]);
+      ctx.beginPath();
+      ctx.moveTo(x, y - 35);
+      ctx.lineTo(x, y - 15);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    
+    // Circle
+    ctx.beginPath();
+    ctx.arc(x, y, 20, 0, Math.PI*2);
+    ctx.fillStyle = c;
+    ctx.fill();
+    ctx.strokeStyle = '#fbbf24';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    
+    // Icon
+    ctx.fillStyle = '#fff';
+    ctx.font = '16px sans-serif';
+    ctx.fillText(icons[i], x, y + 5);
+    
+    // Label
+    ctx.fillStyle = '#f1f5f9';
+    ctx.font = '11px sans-serif';
+    ctx.fillText(labels[i], x + 35, y + 4);
+  });
+}
+
+function toggleState() {
+  state = state === 'menu' ? 'map' : 'menu';
+  render();
+}
+
+function render() {
+  if(state === 'menu') renderMenu();
+  else renderMap();
+  frame++;
+  if(state === 'menu') requestAnimationFrame(render);
+}
+
+// ===== COMBAT TEST =====
+const combatCanvas = document.getElementById('combat');
+const cctx = combatCanvas.getContext('2d');
+
+function testCombat() {
+  cctx.fillStyle = '#0b0f19';
+  cctx.fillRect(0, 0, combatCanvas.width, combatCanvas.height);
+  
+  // Enemy
+  cctx.fillStyle = '#e74c3c';
+  cctx.beginPath();
+  cctx.arc(combatCanvas.width/2, 60, 30, 0, Math.PI*2);
+  cctx.fill();
+  cctx.fillStyle = '#fff';
+  cctx.font = '20px sans-serif';
+  cctx.textAlign = 'center';
+  cctx.fillText('👹', combatCanvas.width/2, 67);
+  
+  // Enemy HP
+  cctx.fillStyle = '#333';
+  cctx.fillRect(combatCanvas.width/2 - 50, 100, 100, 10);
+  cctx.fillStyle = '#e74c3c';
+  cctx.fillRect(combatCanvas.width/2 - 50, 100, 70, 10);
+  cctx.fillStyle = '#fff';
+  cctx.font = '10px sans-serif';
+  cctx.fillText('70/100', combatCanvas.width/2, 108);
+  
+  // Cards in hand
+  const cardColors = ['#e74c3c', '#3498db', '#2ecc71', '#f1c40f', '#9b59b6'];
+  cardColors.forEach((c, i) => {
+    const x = 40 + i * 75;
+    const y = 170;
+    cctx.fillStyle = c;
+    cctx.fillRect(x, y, 60, 80);
+    cctx.strokeStyle = '#fbbf24';
+    cctx.lineWidth = 1;
+    cctx.strokeRect(x, y, 60, 80);
+    cctx.fillStyle = '#fff';
+    cctx.font = '10px sans-serif';
+    cctx.fillText('Card ' + (i+1), x + 30, y + 45);
+  });
+  
+  // End turn button
+  cctx.fillStyle = '#e74c3c';
+  cctx.fillRect(combatCanvas.width - 100, combatCanvas.height - 40, 80, 30);
+  cctx.fillStyle = '#fff';
+  cctx.font = 'bold 11px sans-serif';
+  cctx.fillText('Fim Turno', combatCanvas.width - 60, combatCanvas.height - 20);
+  
+  addLog('Combat test rendered', true);
+}
+
+function addLog(msg, ok) {
+  const now = new Date();
+  const time = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+  logs.unshift({ time, msg, ok });
+  if(logs.length > 20) logs.pop();
+  renderLog();
+}
+
+// ===== INIT =====
+scanAssets();
+renderTasks();
+renderLog();
+render();
+testCombat();
+
+// Auto-refresh every 30s
+setInterval(() => {
+  scanAssets();
+  addLog('Auto-refresh: assets scanned', true);
+}, 30000);
+</script>
+</body>
+</html>
