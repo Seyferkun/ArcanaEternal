@@ -14,9 +14,30 @@
 <script src="content.js"></script>
 <script src="effects.js"></script>
 <script>
-resize();
-render();
-loadAssets();
+console.log('=== GAME INIT ===');
+console.log('canvas:', document.getElementById('game'));
+console.log('resize:', typeof resize);
+console.log('render:', typeof render);
+console.log('loadAssets:', typeof loadAssets);
+try {
+  resize();
+  console.log('resize OK, canvas size:', document.getElementById('game').width, 'x', document.getElementById('game').height);
+} catch(e) {
+  console.error('resize ERROR:', e.message);
+}
+try {
+  render();
+  console.log('render OK');
+} catch(e) {
+  console.error('render ERROR:', e.message);
+}
+try {
+  loadAssets();
+  console.log('loadAssets OK');
+} catch(e) {
+  console.error('loadAssets ERROR:', e.message);
+}
+console.log('=== GAME INIT END ===');
 </script>
 </body>
 </html>
