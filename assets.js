@@ -88,18 +88,32 @@ let assetsLoaded = false;
 
 function loadAssets(callback) {
   const keys = Object.keys(ASSETS);
+  if (keys.length === 0) { assetsLoaded = true; if (callback) callback(); return; }
   let loaded = 0;
+  let failed = 0;
   keys.forEach(key => {
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => {
       loadedAssets[key] = img;
       loaded++;
-      if (loaded === keys.length) { assetsLoaded = true; if (callback) callback(); render(); }
+      if (loaded + failed === keys.length) { assetsLoaded = true; if (callback) callback(); }
     };
-    img.onerror = () => { loaded++; if (loaded === keys.length) { assetsLoaded = true; if (callback) callback(); } };
+    img.onerror = () => {
+      failed++;
+      // Create placeholder for failed images
+      loadedAssets[key] = null;
+      if (loaded + failed === keys.length) { assetsLoaded = true; if (callback) callback(); }
+    };
     img.src = ASSETS[key];
   });
+  // Timeout fallback: after 10s, consider assets loaded regardless
+  setTimeout(() => {
+    if (!assetsLoaded) {
+      assetsLoaded = true;
+      if (callback) callback();
+    }
+  }, 10000);
 }
 
 function getEnemySprite(enemyKey) {
@@ -116,6 +130,87 @@ function getEnemySprite(enemyKey) {
 }
 
 function getCardArt(cardId) {
-  if (loadedAssets[cardId]) return loadedAssets[cardId];
+  // Map card IDs to asset file names
+  var artMap = {
+    // Warrior cards (W prefix)
+    'golpe_rapido': 'W01_strike',
+    'espadada': 'W02_defend',
+    'investida': 'W03_heavy_blow',
+    'golpe_brutal': 'W04_shield_bash',
+    'corte_duplo': 'W05_battle_cry',
+    'estocada': 'W07_whirlwind',
+    // Black Mage cards (BM prefix)
+    'fireball': 'BM01_fireball',
+    'ice_shard': 'BM02_ice_shard',
+    'thunder_bolt': 'BM03_thunder_bolt',
+    'arcane_missile': 'BM04_arcane_missile',
+    'blizzard': 'BM06_blizzard',
+    'meteor': 'BM07_meteor',
+    'mana_surge': 'BM08_mana_surge',
+    'ultima': 'BM10_ultima',
+    // Thief cards (T prefix)
+    'quick_stab': 'T01_quick_stab',
+    'smoke_bomb': 'T02_smoke_bomb',
+    'backstab': 'T03_backstab',
+    'dagger_throw': 'T05_dagger_throw',
+    'shadow_step': 'T06_shadow_step',
+    'assassinate': 'T07_assassinate',
+    'wind_dash': 'T08_wind_dash',
+    'eternal_night': 'T10_eternal_night',
+    // White Mage cards (WM prefix)
+    'holy_light': 'WM01_holy_light',
+    'protect': 'WM02_protect',
+    'cure': 'WM03_cure',
+    'smite': 'WM04_smite',
+    'prayer': 'WM05_prayer',
+    'divine_shield': 'WM06_divine_shield',
+    'holy': 'WM07_holy',
+    'resurrection': 'WM08_resurrection',
+    // Dragoon cards (D prefix)
+    'thrust': 'D01_thrust',
+    'jump': 'D02_jump',
+    'polearm_slash': 'D03_polearm_slash',
+    'dragon_dive': 'D04_dragon_dive',
+    'spear_mastery': 'D05_spear_mastery',
+    'impale': 'D06_impale',
+    'dragoon_oath': 'D07_dragoon_oath',
+    'skyfall_spear': 'D08_skyfall_spear',
+    'lancet': 'D09_lancet',
+    'high_jump': 'D10_high_jump',
+    // Dark Knight cards (DK prefix)
+    'soul_drain': 'DK01_soul_drain',
+    'dark_slash': 'DK02_dark_slash',
+    'blood_price': 'DK03_blood_price',
+    'shadow_strike': 'DK04_shadow_strike',
+    'dark_armor': 'DK05_dark_armor',
+    'soul_reaver': 'DK06_soul_reaver',
+    'dark_pact': 'DK07_dark_pact',
+    'abyssal_blade': 'DK08_abyssal_blade',
+    'living_dead': 'DK09_living_dead',
+    'chaos_dark': 'DK10_chaos_dark',
+    // Bard cards (B prefix)
+    'song_of_courage': 'B01_song_of_courage',
+    'lullaby': 'B02_lullaby',
+    'melody_of_healing': 'B03_melody_of_healing',
+    'inspire': 'B04_inspire',
+    'battle_hymn': 'B06_battle_hymn',
+    'sonic_boom': 'B07_sonic_boom',
+    'encore': 'B08_encore',
+    'symphony': 'B09_symphony',
+    'eternal_song': 'B10_eternal_song',
+    // Neutral cards (N prefix)
+    'arcane_intellect': 'N01_arcane_intellect',
+    'mana_burst': 'N02_mana_burst',
+    // Additional warrior cards
+    'escudo_reforcado': 'W04_shield_bash',
+    'barreira_gelo': 'W05_battle_cry',
+    'foco': 'W07_whirlwind',
+    'preparacao': 'W08_earthquake',
+    'esquiva': 'T02_smoke_bomb',
+    'forca_interior': 'N01_arcane_intellect',
+    'titans_wrath': 'W10_titans_wrath'
+  };
+  var artKey = artMap[cardId] || cardId;
+  if (loadedAssets[artKey]) return loadedAssets[artKey];
   return null;
 }
