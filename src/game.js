@@ -587,42 +587,29 @@ function renderMap() {
 
 function enterNode(node, index) {
   const typeMap = { combat: ['skeleton','bat','slime','goblin','spider','orc','imp','mushroom','knight','wraith'], elite: ['dark_paladin','twin_assassins','golem','vampire'], boss: ['lich','dragon','void_entity'] };
+  let pool = null;
   
   if (node.type === 'combat') {
-    const pool = typeMap.combat;
+    pool = typeMap.combat;
     startCombat(pool[Math.floor(Math.random() * pool.length)]);
   } else if (node.type === 'elite') {
-    const pool = typeMap.elite;
+    pool = typeMap.elite;
     startCombat(pool[Math.floor(Math.random() * pool.length)]);
   } else if (node.type === 'boss') {
-    const pool = typeMap.boss;
+    pool = typeMap.boss;
     startCombat(pool[Math.floor(Math.random() * pool.length)]);
   } else if (node.type === 'rest') {
     state = 'rest';
     render(); return;
-  } else if (node.type === 'shop') {
-    generateShop();
-    state = 'shop';
-    render(); return;
-  } else if (node.type === 'event') {
-    var events = [
-      {text:'Encontrou um tesouro!', effect:function(){runData.gold+=25}},
-      {text:'Fonte magica cura feridas.', effect:function(){runData.hp=Math.min(runData.maxHp,runData.hp+15)}},
-      {text:'Mercador oferece desconto.', effect:function(){runData.gold+=10}}
-    ];
-    var ev = events[Math.floor(Math.random()*events.length)];
-    ev.effect();
-    addLog(ev.text);
-    advanceMap();
   } else if (node.type === 'event') {
     const goldGain = 10 + Math.floor(Math.random() * 15);
     runData.gold += goldGain;
     addLog('Evento: encontrou ' + goldGain + ' de ouro!');
     advanceMap();
   } else if (node.type === 'shop') {
-    runData.gold += 25;
-    addLog('Loja: ganhou 25 de ouro.');
-    advanceMap();
+    generateShop();
+    state = 'shop';
+    render(); return;
   }
   render();
 }
