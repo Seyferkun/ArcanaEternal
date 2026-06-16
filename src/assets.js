@@ -88,32 +88,18 @@ let assetsLoaded = false;
 
 function loadAssets(callback) {
   const keys = Object.keys(ASSETS);
-  if (keys.length === 0) { assetsLoaded = true; if (callback) callback(); return; }
   let loaded = 0;
-  let failed = 0;
   keys.forEach(key => {
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => {
       loadedAssets[key] = img;
       loaded++;
-      if (loaded + failed === keys.length) { assetsLoaded = true; if (callback) callback(); }
+      if (loaded === keys.length) { assetsLoaded = true; if (callback) callback(); render(); }
     };
-    img.onerror = () => {
-      failed++;
-      // Create placeholder for failed images
-      loadedAssets[key] = null;
-      if (loaded + failed === keys.length) { assetsLoaded = true; if (callback) callback(); }
-    };
+    img.onerror = () => { loaded++; if (loaded === keys.length) { assetsLoaded = true; if (callback) callback(); } };
     img.src = ASSETS[key];
   });
-  // Timeout fallback: after 10s, consider assets loaded regardless
-  setTimeout(() => {
-    if (!assetsLoaded) {
-      assetsLoaded = true;
-      if (callback) callback();
-    }
-  }, 10000);
 }
 
 function getEnemySprite(enemyKey) {
