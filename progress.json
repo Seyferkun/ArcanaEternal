@@ -55,7 +55,7 @@
       "owner": "Laptop Hermes (ComfyUI) + VPS Hermes (integration)",
       "duration": "5-7 days",
       "status": "in_progress",
-      "progress": 70,
+      "progress": 85,
       "tasks": [
         {"id": "2.1", "name": "Set up ComfyUI workflow for card art generation", "status": "completed"},
         {"id": "2.2", "name": "Create style reference sheet (5-10 images for consistency)", "status": "completed"},
@@ -74,9 +74,8 @@
         {"id": "2.D2", "name": "assets/characters/ (portraits)", "status": "completed"},
         {"id": "2.D3", "name": "assets/enemies/ (sprites + boss art)", "status": "completed"},
         {"id": "2.D4", "name": "assets/ui/ (icons, frames, buttons)", "status": "completed"},
-        {"id": "2.D5", "name": "assets/backgrounds/ (map scenes)", "status": "in_progress"},
-        {"id": "2.D5", "name": "assets/backgrounds/ (map scenes)", "status": "pending"},
-        {"id": "2.D6", "name": "comfyui_workflow.json (reproducible pipeline)", "status": "pending"}
+        {"id": "2.D5", "name": "assets/backgrounds/ (map scenes)", "status": "completed"},
+        {"id": "2.D6", "name": "comfyui_workflow.json (reproducible pipeline)", "status": "completed"}
       ]
     },
     {
@@ -154,8 +153,8 @@
     "totalPhases": 6,
     "totalTasks": 49,
     "totalDeliverables": 25,
-    "completedTasks": 9,
-    "completedDeliverables": 5,
+    "completedTasks": 10,
+    "completedDeliverables": 7,
     "estimatedDays": 17,
     "startedAt": "2026-06-16T02:30:00Z",
     "currentPhase": 2
