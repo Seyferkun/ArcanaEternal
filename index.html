@@ -1,11 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-<title>Arcana Eternal — Test</title>
-<style>body{margin:0;background:#0b0f19;color:#fff;font-family:sans-serif}</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arcana Eternal — Play</title>
+<link rel="stylesheet" href="style.css">
+<script src="assets.js"></script>
+<script src="game.js"></script>
+<script src="content.js"></script>
+<script src="effects.js"></script>
 </head>
 <body>
-<h1 style="text-align:center;padding-top:100px">ARCANA ETERNAL</h1>
-<p style="text-align:center">Test page — if you see this, GitHub Pages works!</p>
+<canvas id="game"></canvas>
+<div id="ui-layer"></div>
+<script>
+window.addEventListener('DOMContentLoaded', function(){
+  resize();
+  render();
+  loadAssets();
+});
+</script>
 </body>
 </html>
