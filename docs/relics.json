@@ -1,0 +1,37 @@
+{
+  "meta": {
+    "version": "0.1",
+    "game": "ArcanaEternal",
+    "totalRelics": 24,
+    "lastUpdated": "2026-06-16"
+  },
+  "relics": [
+    {"id": "R001", "name": "Arcane Crystal", "rarity": "Starter", "job": "All", "description": "Start each combat with 1 additional Mana.", "effect": {"type": "mana_start", "value": 1}},
+    {"id": "R002", "name": "Warrior's Crest", "rarity": "Starter", "job": "Warrior", "description": "Start each combat with 2 Strength.", "effect": {"type": "strength_start", "value": 2}},
+    {"id": "R003", "name": "Mana Shard", "rarity": "Starter", "job": "BlackMage", "description": "Deal 3 damage to a random enemy when you play a Power card.", "effect": {"type": "on_power", "damage": 3}},
+    {"id": "R004", "name": "Lucky Coin", "rarity": "Starter", "job": "Thief", "description": "Gain 5 Gold after each combat.", "effect": {"type": "gold_per_combat", "value": 5}},
+    {"id": "R005", "name": "Holy Symbol", "rarity": "Starter", "job": "WhiteMage", "description": "Heal 3 HP at the start of each combat.", "effect": {"type": "heal_start", "value": 3}},
+    {"id": "R006", "name": "Dragon Scale", "rarity": "Starter", "job": "Dragoon", "description": "Attacks deal 2 additional damage.", "effect": {"type": "attack_bonus", "value": 2}},
+    {"id": "R007", "name": "Dark Pendant", "rarity": "Starter", "job": "DarkKnight", "description": "When you lose HP, gain 1 Strength.", "effect": {"type": "on_damage_taken", "strength": 1}},
+    {"id": "R008", "name": "Songbook", "rarity": "Starter", "job": "Bard", "description": "Draw 1 additional card at the start of each turn.", "effect": {"type": "extra_draw", "value": 1}},
+
+    {"id": "R009", "name": "Phoenix Feather", "rarity": "Common", "job": "All", "description": "Once per run, survive lethal damage and heal to 50% HP.", "effect": {"type": "revive", "hp_percent": 50}},
+    {"id": "R010", "name": "Berserker's Axe", "rarity": "Common", "job": "All", "description": "Deal 25% more damage. Take 25% more damage.", "effect": {"type": "damage_amp", "value": 0.25}},
+    {"id": "R011", "name": "Mana Potion", "rarity": "Common", "job": "All", "description": "Gain 1 mana at the start of each turn.", "effect": {"type": "mana_per_turn", "value": 1}},
+    {"id": "R012", "name": "Thieves' Gloves", "rarity": "Common", "job": "All", "description": "Gain 3 Gold after winning a combat.", "effect": {"type": "gold_on_win", "value": 3}},
+    {"id": "R013", "name": "Shield of Valor", "rarity": "Common", "job": "All", "description": "Start each combat with 5 Block.", "effect": {"type": "block_start", "value": 5}},
+    {"id": "R014", "name": "Spell Tome", "rarity": "Common", "job": "All", "description": "Power cards cost 1 less mana.", "effect": {"type": "power_discount", "value": 1}},
+    {"id": "R015", "name": "Vampire Fang", "rarity": "Common", "job": "All", "description": "Heal 2 HP when you deal damage to an enemy.", "effect": {"type": "lifesteal", "value": 2}},
+    {"id": "R016", "name": "Boots of Speed", "rarity": "Common", "job": "All", "description": "Draw 1 extra card on the first turn of each combat.", "effect": {"type": "first_turn_draw", "value": 1}},
+
+    {"id": "R017", "name": "Crystal Heart", "rarity": "Rare", "job": "All", "description": "Double all healing received.", "effect": {"type": "heal_amp", "value": 2.0}},
+    {"id": "R018", "name": "Demon's Contract", "rarity": "Rare", "job": "All", "description": "Start each combat with 5 Strength. Lose 2 HP at the start of each turn.", "effect": {"type": "strength_start", "value": 5, "dot": 2}},
+    {"id": "R019", "name": "Time Crystal", "rarity": "Rare", "job": "All", "description": "Once per combat, gain an extra turn.", "effect": {"type": "extra_turn", "uses": 1}},
+    {"id": "R020", "name": "Mirror of Erith", "rarity": "Rare", "job": "All", "description": "Copy the first card you play each combat.", "effect": {"type": "copy_first_card"}},
+
+    {"id": "R021", "name": "Excalibur Shard", "rarity": "Legendary", "job": "All", "description": "All Attacks deal double damage. You cannot gain Block.", "effect": {"type": "attack_double", "no_block": true}},
+    {"id": "R022", "name": "Genie's Lamp", "rarity": "Legendary", "job": "All", "description": "At the start of each combat, add a random Legendary card to your hand.", "effect": {"type": "add_legendary"}},
+    {"id": "R023", "name": "Void Stone", "rarity": "Legendary", "job": "All", "description": "Cards cost 0 mana. You cannot draw cards.", "effect": {"type": "zero_cost", "no_draw": true}},
+    {"id": "R024", "name": "Eternal Flame", "rarity": "Legendary", "job": "All", "description": "At the end of each turn, deal 5 damage to ALL enemies and heal 5 HP.", "effect": {"type": "end_turn_aoe", "damage": 5, "heal": 5}}
+  ]
+}
