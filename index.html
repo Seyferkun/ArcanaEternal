@@ -17,10 +17,7 @@
 window.addEventListener('DOMContentLoaded', function(){
   resize();
   render();
-  // Load assets in background
-  if (typeof loadAssets === 'function') {
-    loadAssets(function(){ render(); });
-  }
+  loadAssets();
 });
 </script>
 </body>
