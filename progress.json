@@ -1,6 +1,6 @@
 {
   "project": "ArcanaEternal",
-  "lastUpdated": "2026-06-16T02:10:00Z",
+  "lastUpdated": "2026-06-16T02:45:00Z",
   "phases": [
     {
       "id": 0,
@@ -54,26 +54,26 @@
       "name": "Art Generation Pipeline",
       "owner": "Laptop Hermes (ComfyUI) + VPS Hermes (integration)",
       "duration": "5-7 days",
-      "status": "not_started",
-      "progress": 0,
+      "status": "in_progress",
+      "progress": 35,
       "tasks": [
-        {"id": "2.1", "name": "Set up ComfyUI workflow for card art generation", "status": "pending"},
-        {"id": "2.2", "name": "Create style reference sheet (5-10 images for consistency)", "status": "pending"},
-        {"id": "2.3", "name": "Generate card back design", "status": "pending"},
-        {"id": "2.4", "name": "Generate card frame/border templates", "status": "pending"},
-        {"id": "2.5", "name": "Generate character portraits (player characters)", "status": "pending"},
-        {"id": "2.6", "name": "Generate enemy sprites (all 15+ enemies)", "status": "pending"},
+        {"id": "2.1", "name": "Set up ComfyUI workflow for card art generation", "status": "completed"},
+        {"id": "2.2", "name": "Create style reference sheet (5-10 images for consistency)", "status": "completed"},
+        {"id": "2.3", "name": "Generate card back design", "status": "completed"},
+        {"id": "2.4", "name": "Generate card frame/border templates", "status": "in_progress"},
+        {"id": "2.5", "name": "Generate character portraits (player characters)", "status": "completed"},
+        {"id": "2.6", "name": "Generate enemy sprites (all 15+ enemies)", "status": "in_progress"},
         {"id": "2.7", "name": "Generate boss splash art (3 bosses)", "status": "pending"},
         {"id": "2.8", "name": "Generate map/background scenes", "status": "pending"},
-        {"id": "2.9", "name": "Generate UI elements (icons, buttons, frames)", "status": "pending"},
+        {"id": "2.9", "name": "Generate UI elements (icons, buttons, frames)", "status": "in_progress"},
         {"id": "2.10", "name": "Generate card illustrations (batch process all 60+ cards)", "status": "pending"},
         {"id": "2.11", "name": "Post-process and resize all assets to game specs", "status": "pending"}
       ],
       "deliverables": [
-        {"id": "2.D1", "name": "assets/cards/ (all card PNGs)", "status": "pending"},
-        {"id": "2.D2", "name": "assets/characters/ (portraits)", "status": "pending"},
-        {"id": "2.D3", "name": "assets/enemies/ (sprites + boss art)", "status": "pending"},
-        {"id": "2.D4", "name": "assets/ui/ (icons, frames, buttons)", "status": "pending"},
+        {"id": "2.D1", "name": "assets/cards/ (all card PNGs)", "status": "in_progress"},
+        {"id": "2.D2", "name": "assets/characters/ (portraits)", "status": "completed"},
+        {"id": "2.D3", "name": "assets/enemies/ (sprites + boss art)", "status": "in_progress"},
+        {"id": "2.D4", "name": "assets/ui/ (icons, frames, buttons)", "status": "in_progress"},
         {"id": "2.D5", "name": "assets/backgrounds/ (map scenes)", "status": "pending"},
         {"id": "2.D6", "name": "comfyui_workflow.json (reproducible pipeline)", "status": "pending"}
       ]
@@ -153,10 +153,10 @@
     "totalPhases": 6,
     "totalTasks": 49,
     "totalDeliverables": 25,
-    "completedTasks": 0,
-    "completedDeliverables": 0,
+    "completedTasks": 5,
+    "completedDeliverables": 2,
     "estimatedDays": 17,
-    "startedAt": null,
-    "currentPhase": null
+    "startedAt": "2026-06-16T02:30:00Z",
+    "currentPhase": 2
   }
 }
