@@ -60,17 +60,18 @@ function resize() {
 // --- RENDER ---
 function render() {
   if (ui) ui.innerHTML = '';
+  if (!ctx) return;
   ctx.fillStyle = '#0b0f19';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   
   switch(state) {
     case 'menu': renderMenu(); break;
-    case 'map': renderMap(); break;
-    case 'combat': renderCombat(); break;
+    case 'map': if(runData) renderMap(); break;
+    case 'combat': if(combat) renderCombat(); break;
     case 'reward': renderReward(); break;
-    case 'shop': renderShop(); break;
-    case 'rest': renderRest(); break;
-    case 'deck': renderDeck(); break;
+    case 'shop': if(runData) renderShop(); break;
+    case 'rest': if(runData) renderRest(); break;
+    case 'deck': if(runData) renderDeck(); break;
     case 'gameover': renderGameOver(); break;
     case 'victory': renderVictory(); break;
   }
