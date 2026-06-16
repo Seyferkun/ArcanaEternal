@@ -1,43 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arcana Eternal — Play</title>
-<link rel="stylesheet" href="style.css">
+<title>Arcana Eternal — Test</title>
+<style>body{margin:0;background:#0b0f19;color:#fff;font-family:sans-serif}</style>
 </head>
 <body>
-<canvas id="game"></canvas>
-<div id="ui-layer"></div>
-<script src="assets.js"></script>
-<script src="game.js"></script>
-<script src="content.js"></script>
-<script src="effects.js"></script>
-<script>
-console.log('=== GAME INIT ===');
-console.log('canvas:', document.getElementById('game'));
-console.log('resize:', typeof resize);
-console.log('render:', typeof render);
-console.log('loadAssets:', typeof loadAssets);
-try {
-  resize();
-  console.log('resize OK, canvas size:', document.getElementById('game').width, 'x', document.getElementById('game').height);
-} catch(e) {
-  console.error('resize ERROR:', e.message);
-}
-try {
-  render();
-  console.log('render OK');
-} catch(e) {
-  console.error('render ERROR:', e.message);
-}
-try {
-  loadAssets();
-  console.log('loadAssets OK');
-} catch(e) {
-  console.error('loadAssets ERROR:', e.message);
-}
-console.log('=== GAME INIT END ===');
-</script>
+<h1 style="text-align:center;padding-top:100px">ARCANA ETERNAL</h1>
+<p style="text-align:center">Test page — if you see this, GitHub Pages works!</p>
 </body>
 </html>
