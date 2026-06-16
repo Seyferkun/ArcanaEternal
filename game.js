@@ -356,7 +356,8 @@ function endTurn() {
 }
 
 function renderCombat() {
-  if (!combat) return;
+  if (!combat) { console.log('renderCombat: no combat'); return; }
+  console.log('renderCombat: enemy=' + combat.enemy.name + ' hand=' + combat.hand.length);
   const enemy = combat.enemy;
   
   // Background
