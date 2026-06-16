@@ -1,21 +1,41 @@
-/* Arcana Eternal — Game Styles */
+/* Arcana Eternal — Final Fantasy Style UI */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lato:wght@300;400;700&display=swap');
+
+:root {
+  --bg: #0b0f19;
+  --bg2: #151f32;
+  --bg3: #1a2332;
+  --text: #f1f5f9;
+  --text-dim: #64748b;
+  --gold: #fbbf24;
+  --gold-dark: #b45309;
+  --blue: #6366f1;
+  --blue-dark: #4338ca;
+  --red: #ef4444;
+  --green: #22c55e;
+  --purple: #a855f7;
+  --border: #1e293b;
+  --glow: rgba(251, 191, 36, 0.3);
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  background: #0b0f19;
-  color: #f1f5f9;
+  font-family: 'Lato', 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
   overflow: hidden;
   height: 100vh;
   width: 100vw;
-  user-select: none;
 }
 
-canvas#game {
+canvas {
   display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  image-rendering: pixelated;
 }
 
 #ui-layer {
@@ -27,47 +47,136 @@ canvas#game {
   pointer-events: none;
 }
 
-#ui-layer * {
-  pointer-events: auto;
+#ui-layer > * { pointer-events: auto; }
+
+/* Buttons */
+.btn {
+  padding: 16px 40px;
+  font-size: 18px;
+  font-weight: 700;
+  font-family: 'Cinzel', serif;
+  background: linear-gradient(135deg, var(--blue-dark), var(--blue));
+  color: #fff;
+  border: 2px solid var(--gold);
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 30px rgba(99, 102, 241, 0.6), inset 0 1px 0 rgba(255,255,255,0.2);
+  border-color: var(--gold);
+}
+
+.btn:active { transform: translateY(0); }
+
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  color: #000;
+  border-color: #fff;
+}
+
+.btn-red {
+  background: linear-gradient(135deg, #991b1b, var(--red));
+  border-color: #fca5a5;
+}
+
+.btn-green {
+  background: linear-gradient(135deg, #166534, var(--green));
+  border-color: #86efac;
+}
+
+/* Card styles */
+.card {
+  border-radius: 8px;
+  border: 2px solid var(--gold);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 8px 30px rgba(251, 191, 36, 0.4);
+  border-color: #fff;
+}
+
+.card.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: #333;
+}
+
+/* HP bar */
+.hp-bar {
+  height: 12px;
+  border-radius: 6px;
+  background: #333;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.hp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ef4444, #f87171);
+  transition: width 0.3s ease;
+}
+
+/* Energy display */
+.energy-display {
+  font-family: 'Cinzel', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--gold);
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+}
+
+/* Node styles for map */
+.node-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 3px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
+}
+
+.node-circle:hover {
+  transform: scale(1.15);
+  box-shadow: 0 0 30px rgba(251, 191, 36, 0.5);
 }
 
 /* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #0b0f19; }
-::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-
-/* Buttons */
-button {
-  font-family: 'Segoe UI', system-ui, sans-serif;
-  transition: all 0.15s ease;
-}
-
-button:hover {
-  filter: brightness(1.2);
-  transform: translateY(-1px);
-}
-
-button:active {
-  transform: translateY(0);
-  filter: brightness(0.9);
-}
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+  0%, 100% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(251, 191, 36, 0.6); }
 }
 
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
+@keyframes glow {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.3); }
 }
 
-.fade-in { animation: fadeIn 0.3s ease; }
-.pulse { animation: pulse 2s infinite; }/* v2 */
+.fade-in { animation: fadeIn 0.5s ease; }
+.pulse { animation: pulse 2s infinite; }
+.glow { animation: glow 1.5s infinite; }

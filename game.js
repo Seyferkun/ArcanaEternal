@@ -79,40 +79,64 @@ function render() {
 
 // --- MENU ---
 function renderMenu() {
-  ctx.fillStyle = '#0b0f19';
+  // Gradient background
+  const grad = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 0, canvas.width/2, canvas.height/2, canvas.width/2);
+  grad.addColorStop(0, '#1a1a3e');
+  grad.addColorStop(1, '#0b0f19');
+  ctx.fillStyle = grad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   
   // Particles
-  for(var i=0;i<30;i++){
-    ctx.fillStyle = 'rgba(251,191,36,' + (Math.random()*0.3) + ')';
+  for(var i=0;i<50;i++){
+    ctx.fillStyle = 'rgba(251,191,36,' + (Math.random()*0.4) + ')';
     ctx.beginPath();
-    ctx.arc(Math.random()*canvas.width, Math.random()*canvas.height, Math.random()*3+1, 0, Math.PI*2);
+    ctx.arc(Math.random()*canvas.width, Math.random()*canvas.height, Math.random()*4+1, 0, Math.PI*2);
     ctx.fill();
   }
   
+  // Decorative lines
+  ctx.strokeStyle = 'rgba(251,191,36,0.1)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(canvas.width/2 - 200, canvas.height/2 - 120);
+  ctx.lineTo(canvas.width/2 + 200, canvas.height/2 - 120);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(canvas.width/2 - 200, canvas.height/2 + 40);
+  ctx.lineTo(canvas.width/2 + 200, canvas.height/2 + 40);
+  ctx.stroke();
+  
+  // Title with glow
+  ctx.shadowColor = '#fbbf24';
+  ctx.shadowBlur = 20;
   ctx.fillStyle = '#fbbf24';
-  ctx.font = 'bold 56px Segoe UI';
+  ctx.font = 'bold 56px Cinzel, Segoe UI, serif';
   ctx.textAlign = 'center';
   ctx.fillText('ARCANA ETERNAL', canvas.width/2, canvas.height/2 - 80);
+  ctx.shadowBlur = 0;
   
+  // Subtitle
   ctx.fillStyle = '#64748b';
-  ctx.font = '18px Segoe UI';
+  ctx.font = '18px Lato, Segoe UI, sans-serif';
   ctx.fillText('Roguelike Deckbuilder Card Game', canvas.width/2, canvas.height/2 - 30);
   
+  // Version
+  ctx.fillStyle = '#444';
+  ctx.font = '12px Lato, Segoe UI, sans-serif';
+  ctx.fillText('v1.0 | 98 AI Art Assets | 7 Jobs | 63 Cards', canvas.width/2, canvas.height - 30);
+  
+  // Button
   const btn = document.createElement('button');
   btn.textContent = 'Novo Jogo';
-  btn.className = 'btn';
-  btn.style.cssText = 'position:absolute;top:55%;left:50%;transform:translate(-50%,-50%);padding:20px 48px;font-size:22px;font-weight:700;background:linear-gradient(135deg,#1a5276,#2980b9);color:#fff;border:none;border-radius:12px;cursor:pointer;box-shadow:0 4px 20px rgba(41,128,185,.5);transition:all .2s';
+  btn.style.cssText = 'position:absolute;top:55%;left:50%;transform:translate(-50%,-50%);padding:20px 48px;font-size:22px;font-weight:700;font-family:Cinzel,serif;background:linear-gradient(135deg,#1a5276,#2980b9);color:#fff;border:2px solid #fbbf24;border-radius:12px;cursor:pointer;box-shadow:0 4px 20px rgba(41,128,185,.5);transition:all .2s';
+  btn.onmouseenter = () => { btn.style.transform = 'translate(-50%,-50%) translateY(-3px)'; btn.style.boxShadow = '0 8px 30px rgba(41,128,185,.7)'; };
+  btn.onmouseleave = () => { btn.style.transform = 'translate(-50%,-50%)'; btn.style.boxShadow = '0 4px 20px rgba(41,128,185,.5)'; };
   btn.onclick = () => {
     runData = { floor:1, hp:70, maxHp:70, gold:50, deck: getStarterDeck(), relics:[], path: generateMap() };
     state = 'map';
     render();
   };
   ui.appendChild(btn);
-  
-  ctx.fillStyle = '#444';
-  ctx.font = '12px Segoe UI';
-  ctx.fillText('v1.0 | 98 AI Art Assets | 7 Jobs | 63 Cards', canvas.width/2, canvas.height - 30);
 }
 
 function getStarterDeck() {
