@@ -7,6 +7,7 @@ function init() {
   canvas = document.getElementById('game');
   ctx = canvas.getContext('2d');
   ui = document.getElementById('ui-layer');
+  resize();
 }
 
 // --- CONSTANTS ---
@@ -397,145 +398,56 @@ function render() {
 }
 
 function renderMenu() {
-  // Background
   ctx.fillStyle = '#0b0f19';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   
-  // Decorative particles
-  for (let i = 0; i < 50; i++) {
-    ctx.fillStyle = `rgba(99,102,241,${Math.random() * 0.3})`;
-    ctx.beginPath();
-    ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 3, 0, Math.PI * 2);
-    ctx.fill();
-  }
-  
   // Title
   ctx.fillStyle = '#6366f1';
-  ctx.font = 'bold 56px Segoe UI';
+  ctx.font = 'bold 48px Segoe UI';
   ctx.textAlign = 'center';
-  ctx.fillText('ARCANA', canvas.width/2, canvas.height/2 - 100);
-  
+  ctx.fillText('ARCANA', canvas.width/2, canvas.height/2 - 80);
   ctx.fillStyle = '#10b981';
-  ctx.font = 'bold 36px Segoe UI';
-  ctx.fillText('ETERNAL', canvas.width/2, canvas.height/2 - 50);
+  ctx.fillText('ETERNAL', canvas.width/2, canvas.height/2 - 20);
   
   ctx.fillStyle = '#64748b';
-  ctx.font = '16px Segoe UI';
-  ctx.fillText('Roguelike Deckbuilder — Final Fantasy Style', canvas.width/2, canvas.height/2 + 10);
-  
-  // Version
-  ctx.fillStyle = '#333';
-  ctx.font = '12px Segoe UI';
-  ctx.fillText('v0.1 — Alpha', canvas.width/2, canvas.height/2 + 35);
+  ctx.font = '18px Segoe UI';
+  ctx.fillText('Roguelike Deckbuilder', canvas.width/2, canvas.height/2 + 30);
   
   // New Game button
-  const btnY = canvas.height/2 + 80;
   const btn = document.createElement('button');
-  btn.textContent = '⚔️  Novo Jogo';
-  btn.style.cssText = `position:absolute;top:${btnY}px;left:50%;transform:translateX(-50%);padding:16px 48px;font-size:20px;background:#6366f1;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:700;box-shadow:0 4px 15px rgba(99,102,241,0.4);transition:all 0.2s`;
-  btn.onmouseenter = () => { btn.style.background = '#4f46e5'; btn.style.transform = 'translateX(-50%) scale(1.05)'; };
-  btn.onmouseleave = () => { btn.style.background = '#6366f1'; btn.style.transform = 'translateX(-50%) scale(1)'; };
-  btn.onclick = () => { 
-    runData = newRun(); 
-    runData.path = generateMap(); 
-    state = 'map'; 
-    sfxClick();
-    render(); 
-  };
+  btn.textContent = 'Novo Jogo';
+  btn.style.cssText = 'position:absolute;top:60%;left:50%;transform:translateX(-50%);padding:16px 48px;font-size:20px;background:#6366f1;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:700';
+  btn.onclick = () => { runData = newRun(); runData.path = generateMap(); state = 'map'; render(); };
   ui.appendChild(btn);
-  
-  // Continue button (if save exists)
-  if (localStorage.getItem('arcana_save')) {
-    const contBtn = document.createElement('button');
-    contBtn.textContent = '📜  Continuar';
-    contBtn.style.cssText = `position:absolute;top:${btnY + 65}px;left:50%;transform:translateX(-50%);padding:12px 36px;font-size:16px;background:#1e293b;color:#f1f5f9;border:1px solid #334155;border-radius:8px;cursor:pointer;font-weight:600`;
-    contBtn.onclick = () => {
-      try {
-        const save = JSON.parse(localStorage.getItem('arcana_save'));
-        runData = save.runData;
-        state = save.state;
-        sfxClick();
-        render();
-      } catch(e) { localStorage.removeItem('arcana_save'); }
-    };
-    ui.appendChild(contBtn);
-  }
-  
-  // Footer
-  ctx.fillStyle = '#334155';
-  ctx.font = '11px Segoe UI';
-  ctx.fillText('Feito com ❤️ por Laptop Hermes + VPS Hermes', canvas.width/2, canvas.height - 20);
 }
 
 function renderMap() {
   ctx.fillStyle = '#0b0f19';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   
-  // Title
   ctx.fillStyle = '#f1f5f9';
   ctx.font = 'bold 24px Segoe UI';
   ctx.textAlign = 'center';
   ctx.fillText('Andar ' + runData.floor + ' / 3', canvas.width/2, 40);
   
-  // Subtitle
-  ctx.fillStyle = '#64748b';
-  ctx.font = '14px Segoe UI';
-  ctx.fillText('Escolha o seu caminho', canvas.width/2, 65);
-  
   // Draw nodes
   const nodeColors = { combat: '#e74c3c', elite: '#f39c12', boss: '#8e44ad', event: '#3498db', shop: '#2ecc71', rest: '#1abc9c' };
   const nodeLabels = { combat: '⚔', elite: '★', boss: '☠', event: '?', shop: '$', rest: '♨' };
   
-  const cols = Math.min(runData.path.length, 8);
-  const totalW = cols * 100;
-  const startX = canvas.width/2 - totalW/2 + 50;
+  const startX = canvas.width/2 - (runData.path.length > 8 ? 400 : runData.path.length * 50);
   
   runData.path.forEach((node, i) => {
-    const col = i % cols;
-    const row = Math.floor(i / cols);
-    const x = startX + col * 100;
-    const y = 120 + row * 120;
-    
-    // Draw line to next node
-    if (i < runData.path.length - 1) {
-      const nextCol = (i + 1) % cols;
-      const nextRow = Math.floor((i + 1) / cols);
-      const nx = startX + nextCol * 100;
-      const ny = 120 + nextRow * 120;
-      
-      ctx.strokeStyle = '#334155';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(x + 25, y);
-      ctx.lineTo(nx - 25, ny);
-      ctx.stroke();
-    }
-    
-    // Highlight current node
-    const isCurrent = i === runData.nodeIndex;
+    const x = startX + (i % 8) * 100;
+    const y = 80 + Math.floor(i / 8) * 120;
     
     // Node circle
     ctx.beginPath();
-    ctx.arc(x, y, isCurrent ? 30 : 25, 0, Math.PI * 2);
+    ctx.arc(x, y, 25, 0, Math.PI * 2);
     ctx.fillStyle = nodeColors[node.type] || '#333';
     ctx.fill();
-    
-    if (isCurrent) {
-      ctx.strokeStyle = '#fbbf24';
-      ctx.lineWidth = 3;
-      ctx.stroke();
-      
-      // Glow effect
-      ctx.beginPath();
-      ctx.arc(x, y, 35, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(251,191,36,0.3)';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-    } else {
-      ctx.strokeStyle = '#475569';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-    }
+    ctx.strokeStyle = '#f1f5f9';
+    ctx.lineWidth = 2;
+    ctx.stroke();
     
     // Label
     ctx.fillStyle = '#fff';
@@ -544,72 +456,59 @@ function renderMap() {
     ctx.textBaseline = 'middle';
     ctx.fillText(nodeLabels[node.type], x, y);
     
-    // Node type label
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = '10px Segoe UI';
-    ctx.fillText(node.type.toUpperCase(), x, y + 35);
-    
     // Clickable
     const btn = document.createElement('button');
-    btn.style.cssText = `position:absolute;left:${x-30}px;top:${y-30}px;width:60px;height:60px;background:transparent;border:none;cursor:pointer`;
+    btn.style.cssText = `position:absolute;left:${x-25}px;top:${y-25}px;width:50px;height:50px;background:transparent;border:none;cursor:pointer`;
     btn.onclick = () => enterNode(node, i);
-    btn.title = node.type.charAt(0).toUpperCase() + node.type.slice(1);
     ui.appendChild(btn);
   });
   
-  // HP and Gold bar
-  ctx.fillStyle = '#1e293b';
-  ctx.fillRect(0, canvas.height - 60, canvas.width, 60);
-  
-  // HP bar
-  ctx.fillStyle = '#334155';
-  ctx.fillRect(20, canvas.height - 45, 200, 20);
-  const hpPct = runData.hp / runData.maxHp;
-  ctx.fillStyle = hpPct > 0.5 ? '#10b981' : hpPct > 0.25 ? '#f59e0b' : '#ef4444';
-  ctx.fillRect(20, canvas.height - 45, 200 * hpPct, 20);
-  ctx.fillStyle = '#fff';
-  ctx.font = 'bold 12px Segoe UI';
-  ctx.textAlign = 'center';
-  ctx.fillText('HP: ' + runData.hp + '/' + runData.maxHp, 120, canvas.height - 31);
-  
-  // Gold
-  ctx.fillStyle = '#fbbf24';
-  ctx.font = 'bold 16px Segoe UI';
+  // HP and Gold
+  ctx.fillStyle = '#f1f5f9';
+  ctx.font = '16px Segoe UI';
   ctx.textAlign = 'left';
-  ctx.fillText('💰 ' + runData.gold, 20, canvas.height - 15);
-  
-  // Floor progress
-  ctx.fillStyle = '#64748b';
-  ctx.font = '12px Segoe UI';
-  ctx.textAlign = 'right';
-  ctx.fillText('Nó ' + (runData.nodeIndex + 1) + '/' + runData.path.length, canvas.width - 20, canvas.height - 15);
+  ctx.fillText('HP: ' + runData.hp + '/' + runData.maxHp, 20, canvas.height - 40);
+  ctx.fillText('Ouro: ' + runData.gold, 20, canvas.height - 15);
 }
 
 function enterNode(node, index) {
   const typeMap = { combat: ['skeleton','bat','slime','goblin','spider','orc','imp','mushroom','knight','wraith'], elite: ['dark_paladin','twin_assassins','golem','vampire'], boss: ['lich','dragon','void_entity'] };
-  let pool = null;
   
   if (node.type === 'combat') {
-    pool = typeMap.combat;
+    const pool = typeMap.combat;
     startCombat(pool[Math.floor(Math.random() * pool.length)]);
   } else if (node.type === 'elite') {
-    pool = typeMap.elite;
+    const pool = typeMap.elite;
     startCombat(pool[Math.floor(Math.random() * pool.length)]);
   } else if (node.type === 'boss') {
-    pool = typeMap.boss;
+    const pool = typeMap.boss;
     startCombat(pool[Math.floor(Math.random() * pool.length)]);
   } else if (node.type === 'rest') {
     state = 'rest';
     render(); return;
+  } else if (node.type === 'shop') {
+    generateShop();
+    state = 'shop';
+    render(); return;
+  } else if (node.type === 'event') {
+    var events = [
+      {text:'Encontrou um tesouro!', effect:function(){runData.gold+=25}},
+      {text:'Fonte magica cura feridas.', effect:function(){runData.hp=Math.min(runData.maxHp,runData.hp+15)}},
+      {text:'Mercador oferece desconto.', effect:function(){runData.gold+=10}}
+    ];
+    var ev = events[Math.floor(Math.random()*events.length)];
+    ev.effect();
+    addLog(ev.text);
+    advanceMap();
   } else if (node.type === 'event') {
     const goldGain = 10 + Math.floor(Math.random() * 15);
     runData.gold += goldGain;
     addLog('Evento: encontrou ' + goldGain + ' de ouro!');
     advanceMap();
   } else if (node.type === 'shop') {
-    generateShop();
-    state = 'shop';
-    render(); return;
+    runData.gold += 25;
+    addLog('Loja: ganhou 25 de ouro.');
+    advanceMap();
   }
   render();
 }
