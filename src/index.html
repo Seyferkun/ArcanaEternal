@@ -9,15 +9,15 @@
 <body>
 <canvas id="game"></canvas>
 <div id="ui-layer"></div>
+<script src="assets.js"></script>
 <script src="game.js"></script>
 <script src="content.js"></script>
 <script src="effects.js"></script>
-<script src="assets.js"></script>
 <script>
 window.addEventListener('DOMContentLoaded', function(){
   resize();
-  loadAssets(function(){ render(); });
   render();
+  loadAssets();
 });
 </script>
 </body>
