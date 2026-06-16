@@ -57,18 +57,7 @@ function renderMenu() {
   btn.onclick = () => {
     runData = { 
       floor: 1, hp: 70, maxHp: 70, gold: 50, 
-      deck: [
-        {id:'golpe_rapido', name:'Golpe Rapido', type:'attack', cost:1, damage:6, desc:'Causa 6 de dano.', color:'#e74c3c'},
-        {id:'golpe_rapido', name:'Golpe Rapido', type:'attack', cost:1, damage:6, desc:'Causa 6 de dano.', color:'#e74c3c'},
-        {id:'golpe_rapido', name:'Golpe Rapido', type:'attack', cost:1, damage:6, desc:'Causa 6 de dano.', color:'#e74c3c'},
-        {id:'golpe_rapido', name:'Golpe Rapido', type:'attack', cost:1, damage:6, desc:'Causa 6 de dano.', color:'#e74c3c'},
-        {id:'golpe_rapido', name:'Golpe Rapido', type:'attack', cost:1, damage:6, desc:'Causa 6 de dano.', color:'#e74c3c'},
-        {id:'escudo_reforcado', name:'Escudo Reforcado', type:'skill', cost:1, block:8, desc:'Ganha 8 de escudo.', color:'#2ecc71'},
-        {id:'escudo_reforcado', name:'Escudo Reforcado', type:'skill', cost:1, block:8, desc:'Ganha 8 de escudo.', color:'#2ecc71'},
-        {id:'escudo_reforcado', name:'Escudo Reforcado', type:'skill', cost:1, block:8, desc:'Ganha 8 de escudo.', color:'#2ecc71'},
-        {id:'foco', name:'Foco', type:'skill', cost:1, draw:2, desc:'Compra 2 cartas.', color:'#9b59b6'},
-        {id:'foco', name:'Foco', type:'skill', cost:1, draw:2, desc:'Compra 2 cartas.', color:'#9b59b6'}
-      ],
+      deck: STARTER_DECK.map(c => ({...c})),
       path: generateMap() 
     };
     state = 'map';
@@ -219,6 +208,23 @@ function renderMap() {
   ctx.textAlign = 'right';
   ctx.fillText('Floor ' + runData.floor + '/3 | Nodes: ' + floorNodes.length, canvas.width - 20, canvas.height - 10);
 }
+
+// --- CARD CONSTANTS ---
+const CARD_W = 140, CARD_H = 200;
+
+// --- STARTER DECK ---
+const STARTER_DECK = [
+  {id:'golpe_rapido', name:'Golpe Rapido', type:'attack', cost:1, damage:6, desc:'Causa 6 de dano.', color:'#e74c3c'},
+  {id:'golpe_rapido', name:'Golpe Rapido', type:'attack', cost:1, damage:6, desc:'Causa 6 de dano.', color:'#e74c3c'},
+  {id:'golpe_rapido', name:'Golpe Rapido', type:'attack', cost:1, damage:6, desc:'Causa 6 de dano.', color:'#e74c3c'},
+  {id:'golpe_rapido', name:'Golpe Rapido', type:'attack', cost:1, damage:6, desc:'Causa 6 de dano.', color:'#e74c3c'},
+  {id:'golpe_rapido', name:'Golpe Rapido', type:'attack', cost:1, damage:6, desc:'Causa 6 de dano.', color:'#e74c3c'},
+  {id:'escudo_reforcado', name:'Escudo Reforcado', type:'skill', cost:1, block:8, desc:'Ganha 8 de escudo.', color:'#2ecc71'},
+  {id:'escudo_reforcado', name:'Escudo Reforcado', type:'skill', cost:1, block:8, desc:'Ganha 8 de escudo.', color:'#2ecc71'},
+  {id:'escudo_reforcado', name:'Escudo Reforcado', type:'skill', cost:1, block:8, desc:'Ganha 8 de escudo.', color:'#2ecc71'},
+  {id:'foco', name:'Foco', type:'skill', cost:1, draw:2, desc:'Compra 2 cartas.', color:'#9b59b6'},
+  {id:'foco', name:'Foco', type:'skill', cost:1, draw:2, desc:'Compra 2 cartas.', color:'#9b59b6'}
+];
 
 // --- COMBAT SYSTEM ---
 let combat = null;
