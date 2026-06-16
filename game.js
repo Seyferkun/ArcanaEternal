@@ -552,7 +552,7 @@ function renderCombat() {
   ctx.fillStyle = '#f1f5f9';
   ctx.font = 'bold 18px Segoe UI';
   ctx.textAlign = 'center';
-  ctx.fillText(enemy.name + (elite ? ' [ELITE]' : '') + (boss ? ' [BOSS]' : ''), ex, ey - 70);
+  ctx.fillText(enemy.name + (enemy.elite ? ' [ELITE]' : '') + (enemy.boss ? ' [BOSS]' : ''), ex, ey - 70);
   
   // Enemy HP bar
   const hpW = 200, hpH = 16;
