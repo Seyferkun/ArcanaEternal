@@ -476,9 +476,7 @@ function enterNode(node, index) {
     const pool = typeMap.elite;
     startCombat(pool[Math.floor(Math.random() * pool.length)]);
   } else if (node.type === 'boss') {
-    co
-
-nst pool = typeMap.boss;
+    const pool = typeMap.boss;
     startCombat(pool[Math.floor(Math.random() * pool.length)]);
   } else if (node.type === 'rest') {
     state = 'rest';
