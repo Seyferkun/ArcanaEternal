@@ -220,7 +220,7 @@ class BootScene extends Phaser.Scene {
 
     // Load only ESSENTIAL assets for faster loading
     const essentialCards = [
-      'card_back','card_frame_gold','card_frame_silver','card_frame_bronze',
+      'card_back','card_frame',
       'W01_strike','W02_defend','W03_heavy_blow','W04_shield_bash','W05_battle_cry',
       'BM01_fireball','BM02_ice_shard','BM03_thunder_bolt','BM06_blizzard','BM07_meteor','BM10_ultima',
       'T01_quick_stab','T02_smoke_bomb','T03_backstab','T05_dagger_throw','T07_assassinate','T10_eternal_night',
