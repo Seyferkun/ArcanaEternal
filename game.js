@@ -631,13 +631,25 @@ class RewardScene extends Phaser.Scene {
         .on('pointerdown',()=>{this.runData.deck.push({...card});this.scene.start('MapScene',{runData:this.runData});});
     });
 
-    this.add.text(w/2,h-60,'Pular',{fontFamily:'Cinzel,serif',fontSize:'14px',color:'#64748b'}).setOrigin(0.5).setInteractive({useHandCursor:true}).on('pointerdown',()=>this.scene.start('MapScene',{runData:this.runData}));
+    // Relic reward option
+    const allRelics=Object.entries(RELIC_DB);
+    const relicReward=allRelics[Math.floor(Math.random()*allRelics.length)];
+    const rx=w/2,ry=h-100;
+    const rbg=this.add.graphics().fillStyle(0x4a235a,1).fillRoundedRect(rx-80,ry-25,160,50,8).lineStyle(2,0xa855f7,1).strokeRoundedRect(rx-80,ry-25,160,50,8);
+    this.add.text(rx,ry-8,`🔮 ${relicReward[1].name}`,{fontFamily:'Cinzel,serif',fontSize:'11px',fontStyle:'bold',color:'#e9d5ff'}).setOrigin(0.5);
+    this.add.text(rx,ry+10,relicReward[1].desc,{fontSize:'8px',color:'#c084fc'}).setOrigin(0.5);
+    this.add.zone(rx,ry,160,50).setInteractive({useHandCursor:true})
+      .on('pointerover',()=>this.tweens.add({targets:rbg,scaleY:1.05,duration:150}))
+      .on('pointerout',()=>this.tweens.add({targets:rbg,scaleY:1,duration:150}))
+      .on('pointerdown',()=>{this.runData.relics.push(relicReward[0]);this.scene.start('MapScene',{runData:this.runData});});
+
+    this.add.text(w/2,h-40,'Pular',{fontFamily:'Cinzel,serif',fontSize:'14px',color:'#64748b'}).setOrigin(0.5).setInteractive({useHandCursor:true}).on('pointerdown',()=>this.scene.start('MapScene',{runData:this.runData}));
     this.cameras.main.fadeIn(400);
   }
 }
 
 // ============================================
-// SHOP SCENE
+// SHOP SCENE (improved with relics)
 // ============================================
 class ShopScene extends Phaser.Scene {
   constructor(){super({key:'ShopScene'});}init(data){this.runData=data.runData;}
@@ -680,6 +692,18 @@ class ShopScene extends Phaser.Scene {
     this.cameras.main.fadeIn(300);
   }
 }
+
+// ===== RELIC DATABASE =====
+const RELIC_DB = {
+  ring_of_strength:{name:'Anel de Força',desc:'+2 Força permanente.',effect:'strength',value:2,rarity:'common'},
+  amulet_of_vitality:{name:'Amuleto de Vitalidade',desc:'+15 HP máximo.',effect:'maxHp',value:15,rarity:'common'},
+  boots_of_speed:{name:'Botas de Velocidade',desc:'+1 energia por turno.',effect:'energy',value:1,rarity:'uncommon'},
+  ring_of_regen:{name:'Anel de Regeneração',desc:'Cura 3 HP por turno.',effect:'regen',value:3,rarity:'uncommon'},
+  sword_of_fury:{name:'Espada da Fúria',desc:'+3 dano em ataques.',effect:'damage',value:3,rarity:'rare'},
+  shield_of_light:{name:'Escudo de Luz',desc:'+5 escudo por turno.',effect:'block_per_turn',value:5,rarity:'rare'},
+  orb_of_wisdom:{name:'Orbe da Sabedoria',desc:'Compra 1 carta extra/turno.',effect:'draw_per_turn',value:1,rarity:'rare'},
+  crown_of_kings:{name:'Coroa dos Reis',desc:'+2 Força, +10 HP, +1 energia.',effect:'multi',value:{str:2,hp:10,energy:1},rarity:'legendary'},
+};
 
 // ============================================
 // REST SCENE
