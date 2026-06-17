@@ -922,8 +922,8 @@ class VictoryScene extends Phaser.Scene {
 // ============================================
 config.scene=[BootScene,MenuScene,MapScene,CombatScene,RewardScene,ShopScene,RestScene,EventScene,DeckScene,GameOverScene,VictoryScene];
 try {
-  const game=new Phaser.Game(config);
-  window.addEventListener('resize',()=>game.scale.resize(window.innerWidth,window.innerHeight));
+  window.game = new Phaser.Game(config);
+  window.addEventListener('resize',()=>game.scale.resize(window.innerWidth,window.innerHeight))
 } catch(e) {
   console.error('Game init error:', e);
   document.body.innerHTML='<div style="color:#fff;padding:40px;font-family:sans-serif;background:#0b0f19;min-height:100vh"><h1 style="color:#fbbf24">⚠️ Error Loading Game</h1><p style="color:#ef4444;font-size:16px">'+e.message+'</p><pre style="color:#64748b;font-size:12px;white-space:pre-wrap;word-break:break-all">'+e.stack+'</pre><button onclick="location.reload()" style="margin-top:20px;padding:10px 20px;background:#6366f1;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:14px">Reload</button></div>';
