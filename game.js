@@ -887,5 +887,9 @@ try {
   window.addEventListener('resize',()=>game.scale.resize(window.innerWidth,window.innerHeight));
 } catch(e) {
   console.error('Game init error:', e);
-  document.body.innerHTML='<div style="color:#fff;padding:40px;font-family:sans-serif"><h1>Error loading game</h1><p>'+e.message+'</p><pre>'+e.stack+'</pre></div>';
+  document.body.innerHTML='<div style="color:#fff;padding:40px;font-family:sans-serif;background:#0b0f19;min-height:100vh"><h1 style="color:#fbbf24">⚠️ Error Loading Game</h1><p style="color:#ef4444;font-size:16px">'+e.message+'</p><pre style="color:#64748b;font-size:12px;white-space:pre-wrap;word-break:break-all">'+e.stack+'</pre><button onclick="location.reload()" style="margin-top:20px;padding:10px 20px;background:#6366f1;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:14px">Reload</button></div>';
 }
+window.onerror=function(msg,url,line,col,err){
+  console.error('Global error:', msg, url, line);
+  window.lastError=msg+' at line '+line;
+};
