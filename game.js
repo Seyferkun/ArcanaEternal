@@ -133,20 +133,20 @@ const CARD_DB = {
   B10_eternal_song:{id:'B10_eternal_song',name:'Canção Eterna',type:'power',cost:2,perm:true,effect:'draw_per_turn',amount:1,desc:'Permanente: compra 1 carta/turno.',color:'#d4ac0d',rarity:'legendary',art:'B10_eternal_song',job:'Bard'},
 };
 
-// ===== ENEMY DATABASE =====
+// ===== ENEMY DATABASE (balanced) =====
 const ENEMY_DB = {
-  skeleton:{name:'Esqueleto',hp:28,maxHp:28,dmg:6,sprite:'skeleton',intent:['attack','defend']},
-  slime:{name:'Slime',hp:35,maxHp:35,dmg:5,sprite:'slime',intent:['attack','attack']},
-  goblin:{name:'Goblin',hp:22,maxHp:22,dmg:7,sprite:'goblin',intent:['attack','buff']},
-  wolf:{name:'Lobo',hp:32,maxHp:32,dmg:8,sprite:'wolf',intent:['attack','attack']},
-  spider:{name:'Aranha',hp:40,maxHp:40,dmg:9,sprite:'spider',intent:['attack','poison']},
-  ghost:{name:'Fantasma',hp:30,maxHp:30,dmg:10,sprite:'ghost',intent:['attack','dodge']},
-  dark_mage:{name:'Mago Negro',hp:45,maxHp:45,dmg:12,sprite:'dark_mage',intent:['attack','debuff']},
-  golem:{name:'Golem de Pedra',hp:80,maxHp:80,dmg:14,sprite:'golem',intent:['attack','defend'],elite:true},
-  dark_knight:{name:'Cav. Sombrio',hp:90,maxHp:90,dmg:16,sprite:'dark_knight',intent:['attack','lifesteal'],elite:true},
-  boss_dragon:{name:'Dragão Vermelho',hp:150,maxHp:150,dmg:20,sprite:'boss_dragon',intent:['attack','aoe','buff'],boss:true},
-  boss_lich:{name:'Lich',hp:120,maxHp:120,dmg:18,sprite:'boss_lich',intent:['attack','summon','debuff'],boss:true},
-  boss_demon:{name:'Demon Lord',hp:180,maxHp:180,dmg:25,sprite:'boss_demon',intent:['attack','aoe','lifesteal'],boss:true},
+  skeleton:{name:'Esqueleto',hp:25,maxHp:25,dmg:5,sprite:'skeleton',intent:['attack','defend']},
+  slime:{name:'Slime',hp:30,maxHp:30,dmg:4,sprite:'slime',intent:['attack','attack']},
+  goblin:{name:'Goblin',hp:20,maxHp:20,dmg:6,sprite:'goblin',intent:['attack','buff']},
+  wolf:{name:'Lobo',hp:28,maxHp:28,dmg:7,sprite:'wolf',intent:['attack','attack']},
+  spider:{name:'Aranha',hp:35,maxHp:35,dmg:8,sprite:'spider',intent:['attack','poison']},
+  ghost:{name:'Fantasma',hp:28,maxHp:28,dmg:9,sprite:'ghost',intent:['attack','dodge']},
+  dark_mage:{name:'Mago Negro',hp:40,maxHp:40,dmg:10,sprite:'dark_mage',intent:['attack','debuff']},
+  golem:{name:'Golem de Pedra',hp:70,maxHp:70,dmg:12,sprite:'golem',intent:['attack','defend'],elite:true},
+  dark_knight:{name:'Cav. Sombrio',hp:80,maxHp:80,dmg:14,sprite:'dark_knight',intent:['attack','lifesteal'],elite:true},
+  boss_dragon:{name:'Dragão Vermelho',hp:140,maxHp:140,dmg:18,sprite:'boss_dragon',intent:['attack','aoe','buff'],boss:true},
+  boss_lich:{name:'Lich',hp:110,maxHp:110,dmg:16,sprite:'boss_lich',intent:['attack','summon','debuff'],boss:true},
+  boss_demon:{name:'Demon Lord',hp:160,maxHp:160,dmg:22,sprite:'boss_demon',intent:['attack','aoe','lifesteal'],boss:true},
 };
 
 const config = {
