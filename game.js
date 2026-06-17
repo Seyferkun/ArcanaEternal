@@ -196,6 +196,8 @@ const RELIC_DB = {
 };
 
 const config = {
+  type: Phaser.AUTO,
+  parent: 'game-container',
   width: window.innerWidth,
   height: window.innerHeight,
   backgroundColor: '#0b0f19',
