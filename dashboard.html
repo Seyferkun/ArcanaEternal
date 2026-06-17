@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arcana Eternal — Dev Dashboard</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0b0f19;color:#f1f5f9;min-height:100vh;padding:20px}
+h1{font-size:28px;color:#fbbf24;margin-bottom:8px}
+.subtitle{color:#64748b;font-size:14px;margin-bottom:30px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.card{background:#151f32;border:1px solid #1e293b;border-radius:12px;padding:20px}
+.card h2{font-size:18px;color:#fbbf24;margin-bottom:12px}
+.progress-bar{height:8px;background:#1e293b;border-radius:4px;overflow:hidden;margin:8px 0}
+.progress-fill{height:100%;background:linear-gradient(90deg,#fbbf24,#f59e0b);border-radius:4px;transition:width 0.5s}
+.stat{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #1e293b;font-size:14px}
+.stat:last-child{border-bottom:none}
+.stat .label{color:#64748b}
+.stat .value{font-weight:600}
+.stat .value.done{color:#22c55e}
+.stat .value.wip{color:#fbbf24}
+canvas{border:1px solid #1e293b;border-radius:8px;background:#000;margin-top:10px;width:100%;max-width:400px}
+.btn{display:inline-block;padding:8px 16px;background:#6366f1;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:14px;margin-top:10px}
+.btn:hover{background:#4f46e5}
+.log{background:#0b0f19;border:1px solid #1e293d;border-radius:6px;padding:10px;font-family:monospace;font-size:12px;max-height:200px;overflow-y:auto;margin-top:10px}
+.log-entry{padding:2px 0;border-bottom:1px solid #1e293b}
+.log-entry .time{color:#64748b}
+.log-entry .msg.ok{color:#22c55e}
+</style>
+</head>
+<body>
+<h1>🎮 Arcana Eternal — Dev Dashboard</h1>
+<p class="subtitle">Phaser 3 Migration Tracker</p>
+
+<div class="grid">
+<div class="card">
+  <h2>📊 Progress</h2>
+  <div class="stat"><span class="label">Phaser 3 Migration</span><span class="value wip">60%</span></div>
+  <div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div>
+  <div class="stat"><span class="label">Art Assets</span><span class="value done">113 images</span></div>
+  <div class="stat"><span class="label">Scenes</span><span class="value done">10/10</span></div>
+  <div class="stat"><span class="label">Card Frames</span><span class="value done">3 (gold/silver/bronze)</span></div>
+  <div class="stat"><span class="label">Enemy Sprites</span><span class="value done">21</span></div>
+  <div class="stat"><span class="label">Backgrounds</span><span class="value done">10</span></div>
+</div>
+
+<div class="card">
+  <h2>✅ Tasks</h2>
+  <div class="stat"><span class="label">Phaser 3 setup</span><span class="value done">✓</span></div>
+  <div class="stat"><span class="label">BootScene (loading)</span><span class="value done">✓</span></div>
+  <div class="stat"><span class="label">MenuScene</span><span class="value done">✓</span></div>
+  <div class="stat"><span class="label">MapScene</span><span class="value done">✓</span></div>
+  <div class="stat"><span class="label">CombatScene</span><span class="value done">✓</span></div>
+  <div class="stat"><span class="label">Reward/Shop/Rest</span><span class="value done">✓</span></div>
+  <div class="stat"><span class="label">Deck/GameOver/Victory</span><span class="value done">✓</span></div>
+  <div class="stat"><span class="label">Card art integration</span><span class="value done">✓</span></div>
+  <div class="stat"><span class="label">Animations & VFX</span><span class="value wip">⚡</span></div>
+  <div class="stat"><span class="label">Sound effects</span><span class="value" style="color:#64748b">○</span></div>
+  <div class="stat"><span class="label">Balanceamento</span><span class="value" style="color:#64748b">○</span></div>
+</div>
+
+<div class="card">
+  <h2>🕹️ Game Preview</h2>
+  <canvas id="game" width="400" height="300"></canvas>
+  <button class="btn" onclick="location.reload()">↻ Reload</button>
+</div>
+
+<div class="card">
+  <h2>📝 Activity Log</h2>
+  <div class="log">
+    <div class="log-entry"><span class="time">[15:45]</span> <span class="msg ok">Phaser 3 migration started</span></div>
+    <div class="log-entry"><span class="time">[15:42]</span> <span class="msg ok">113 card arts generated</span></div>
+    <div class="log-entry"><span class="time">[15:38]</span> <span class="msg ok">Card frames generated (gold/silver/bronze)</span></div>
+    <div class="log-entry"><span class="time">[15:35]</span> <span class="msg ok">Enhanced enemies generated (18)</span></div>
+    <div class="log-entry"><span class="time">[15:30]</span> <span class="msg ok">Enhanced backgrounds generated (5)</span></div>
+    <div class="log-entry"><span class="time">[15:25]</span> <span class="msg ok">CSS/HTML redesign complete</span></div>
+    <div class="log-entry"><span class="time">[15:20]</span> <span class="msg ok">GDD, Style Guide, Asset List created</span></div>
+    <div class="log-entry"><span class="time">[15:15]</span> <span class="msg ok">Division: Laptop=Art, VPS=Code</span></div>
+  </div>
+</div>
+</div>
+
+<script>
+// Simple canvas preview
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+let frame = 0;
+
+function render() {
+  const t = Date.now() / 1000;
+  const grad = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 0, canvas.width/2, canvas.height/2, canvas.width/2);
+  grad.addColorStop(0, '#1a1a3e');
+  grad.addColorStop(1, '#0b0f19');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Particles
+  for(let i=0;i<30;i++){
+    const px = (Math.sin(t*0.3+i*0.5)*0.5+0.5)*canvas.width;
+    const py = (Math.cos(t*0.2+i*0.7)*0.5+0.5)*canvas.height;
+    ctx.fillStyle = `rgba(251,191,36,${Math.sin(t*0.5+i)*0.15+0.2})`;
+    ctx.beginPath();
+    ctx.arc(px, py, Math.sin(t+i)*2+3, 0, Math.PI*2);
+    ctx.fill();
+  }
+
+  // Title
+  ctx.shadowColor = '#fbbf24';
+  ctx.shadowBlur = 15;
+  ctx.fillStyle = '#fbbf24';
+  ctx.font = 'bold 24px serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('ARCANA ETERNAL', canvas.width/2, canvas.height/2-20);
+  ctx.shadowBlur = 0;
+
+  ctx.fillStyle = '#64748b';
+  ctx.font = '12px sans-serif';
+  ctx.fillText('Phaser 3 | 113 Assets | v2.0', canvas.width/2, canvas.height/2+10);
+
+  // Button
+  ctx.fillStyle = '#1a5276';
+  ctx.fillRect(canvas.width/2-60, canvas.height/2+30, 120, 35);
+  ctx.strokeStyle = '#fbbf24';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(canvas.width/2-60, canvas.height/2+30, 120, 35);
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 14px sans-serif';
+  ctx.fillText('Novo Jogo', canvas.width/2, canvas.height/2+52);
+
+  frame++;
+  requestAnimationFrame(render);
+}
+render();
+</script>
+</body>
+</html>

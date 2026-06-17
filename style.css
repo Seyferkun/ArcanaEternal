@@ -70,4 +70,8 @@ button:active {
 }
 
 .fade-in { animation: fadeIn 0.3s ease; }
+<<<<<<< HEAD
 .pulse { animation: pulse 2s infinite; }/* v2 */
+=======
+.pulse { animation: pulse 2s infinite; }
+>>>>>>> 5f7e83f (deploy: ea85e68cf2fe6ce77aecbe370f45aae9643178e4)

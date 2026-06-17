@@ -2,30 +2,14 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arcana Eternal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Arcana Eternal — Roguelike Deckbuilder</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<canvas id="game"></canvas>
-<div id="ui-layer"></div>
-<script src="assets.js"></script>
+<div id="game-container"></div>
+<script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
 <script src="game.js"></script>
-<script src="cache-buster.js"></script>
-<script>
-window.addEventListener('DOMContentLoaded', function() {
-  try {
-    if (typeof init === 'function') init();
-    if (typeof resize === 'function') resize();
-    if (typeof loadAssets === 'function') {
-      loadAssets(function() {
-        if (typeof render === 'function') render();
-      });
-    }
-  } catch(e) {
-    console.error('INIT ERROR:', e.message, e.stack);
-  }
-});
-</script>
 </body>
 </html>
