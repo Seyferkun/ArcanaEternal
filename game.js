@@ -4,8 +4,77 @@
 // ============================================
 
 // ============================================
-// ARCANA ETERNAL v2.1 — Phaser 3 Game Engine
+// ARCANA ETERNAL v2.2 — Phaser 3 Game Engine
 // ============================================
+
+// ===== SOUND SYSTEM (Web Audio API) =====
+const SFX = {
+  ctx: null,
+  init() {
+    try { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
+  },
+  play(type) {
+    if(!this.ctx) this.init();
+    if(!this.ctx) return;
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    const now = this.ctx.currentTime;
+
+    switch(type) {
+      case 'cardPlay':
+        osc.frequency.setValueAtTime(600, now);
+        osc.frequency.exponentialRampToValueAtTime(300, now+0.1);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now+0.15);
+        osc.start(now); osc.stop(now+0.15);
+        break;
+      case 'damage':
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(200, now);
+        osc.frequency.exponentialRampToValueAtTime(80, now+0.15);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now+0.2);
+        osc.start(now); osc.stop(now+0.2);
+        break;
+      case 'heal':
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(400, now);
+        osc.frequency.exponentialRampToValueAtTime(800, now+0.2);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now+0.25);
+        osc.start(now); osc.stop(now+0.25);
+        break;
+      case 'victory':
+        osc.type = 'triangle';
+        [523,659,784,1047].forEach((f,i)=>{
+          const o=this.ctx.createOscillator(),g=this.ctx.createGain();
+          o.connect(g);g.connect(this.ctx.destination);
+          o.frequency.setValueAtTime(f,now+i*0.15);
+          g.gain.setValueAtTime(0.1,now+i*0.15);
+          g.gain.exponentialRampToValueAtTime(0.001,now+i*0.15+0.3);
+          o.start(now+i*0.15);o.stop(now+i*0.15+0.3);
+        });
+        return;
+      case 'defeat':
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(300, now);
+        osc.frequency.exponentialRampToValueAtTime(100, now+0.4);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now+0.5);
+        osc.start(now); osc.stop(now+0.5);
+        break;
+      case 'button':
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(800, now);
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now+0.08);
+        osc.start(now); osc.stop(now+0.08);
+        break;
+    }
+  }
+};
 
 // ===== CARD DATABASE (63 cards) =====
 const CARD_DB = {
@@ -190,7 +259,7 @@ class MenuScene extends Phaser.Scene {
     this.add.zone(cx,cy+80,240,55).setInteractive({useHandCursor:true})
       .on('pointerover',()=>{btnBg.clear().fillStyle(0x2980b9,1).fillRoundedRect(cx-120,cy+50,240,50,8).lineStyle(2,0xffffff,1).strokeRoundedRect(cx-120,cy+50,240,50,8);this.tweens.add({targets:btnTxt,y:cy+75,duration:150});})
       .on('pointerout',()=>{btnBg.clear().fillStyle(0x1a5276,1).fillRoundedRect(cx-120,cy+55,240,50,8).lineStyle(2,0xfbbf24,1).strokeRoundedRect(cx-120,cy+55,240,50,8);this.tweens.add({targets:btnTxt,y:cy+80,duration:150});})
-      .on('pointerdown',()=>{this.cameras.main.fadeOut(500);this.cameras.main.once('camerafadeoutcomplete',()=>this.scene.start('MapScene'));});
+      .on('pointerdown',()=>{SFX.play('button');this.cameras.main.fadeOut(500);this.cameras.main.once('camerafadeoutcomplete',()=>this.scene.start('MapScene'));});
 
     this.add.text(cx,h-25,'v2.1 | Phaser 3 | 63 Cards | 7 Jobs | 13 Enemies',{fontFamily:'Lato,sans-serif',fontSize:'11px',color:'#333'}).setOrigin(0.5);
     this.cameras.main.fadeIn(600);
@@ -440,6 +509,7 @@ class CombatScene extends Phaser.Scene {
     if(!card||card.cost>this.energy)return;
 
     this.energy-=card.cost;
+    SFX.play('cardPlay');
     this.combat.hand.splice(index,1);
     this.combat.discardPile.push(card);
 
@@ -453,9 +523,10 @@ class CombatScene extends Phaser.Scene {
       else this.enemy.hp-=dmg;
       logMsg+=` → ${dmg} dano`;
       this.showDamage(this.enemyImg.x,this.enemyImg.y-30,dmg,'#ef4444');
-      this.cameras.main.shake(100,0.003);
-      if(card.block){this.playerBlock+=card.block;logMsg+=` +${card.block} escudo`;}
-      if(card.heal){this.runData.hp=Math.min(this.runData.maxHp,this.runData.hp+card.heal);this.showDamage(50,this.cameras.main.height-80,card.heal,'#2ecc71');logMsg+=` +${card.heal} cura`;}
+        SFX.play('damage');
+        this.cameras.main.shake(100,0.003);
+        if(card.block){this.playerBlock+=card.block;logMsg+=` +${card.block} escudo`;}
+        if(card.heal){this.runData.hp=Math.min(this.runData.maxHp,this.runData.hp+card.heal);this.showDamage(50,this.cameras.main.height-80,card.heal,'#2ecc71');SFX.play('heal');logMsg+=` +${card.heal} cura`;}
       if(card.apply==='vulnerable'){this.enemy.vulnerable=(this.enemy.vulnerable||0)+card.applyVal;logMsg+=` +${card.applyVal} Vulnerável`;}
       if(card.apply==='weak'){this.enemy.weak=(this.enemy.weak||0)+card.applyVal;logMsg+=` +${card.applyVal} Fraco`;}
       if(card.apply==='poison'){this.enemy.poison=(this.enemy.poison||0)+card.applyVal;logMsg+=` +${card.applyVal} Veneno`;}
@@ -495,7 +566,7 @@ class CombatScene extends Phaser.Scene {
       this.playerBlock=0;
       this.runData.hp-=enemyDmg;
       logMsg+=`Atacou por ${enemyDmg}`;
-      if(this.enemy.hits){this.runData.hp-=enemyDmg;this.showDamage(w/2,h-100,enemyDmg*2,'#ef4444');}
+      if(enemyDmg>0){this.runData.hp-=enemyDmg;this.showDamage(w/2,h-100,enemyDmg,'#ef4444');SFX.play('damage');}
       else this.showDamage(w/2,h-100,enemyDmg,'#ef4444');
     } else if(intent==='defend'){
       this.enemy.block+=8;
@@ -558,6 +629,7 @@ class CombatScene extends Phaser.Scene {
 
   endCombat(won){
     this.combatOver=true;
+    SFX.play(won?'victory':'defeat');
     const{w,h}=this.cameras.main;
     this.add.rectangle(w/2,h/2,w,h,0x000000,0.7);
     this.add.text(w/2,h/2-30,won?'VITÓRIA!':'DERROTA',{fontFamily:'Cinzel,serif',fontSize:'42px',fontStyle:'bold',color:won?'#fbbf24':'#e74c3c'}).setOrigin(0.5);
