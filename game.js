@@ -872,8 +872,13 @@ class VictoryScene extends Phaser.Scene {
 }
 
 // ============================================
-// LAUNCH GAME
+// START GAME
 // ============================================
 config.scene=[BootScene,MenuScene,MapScene,CombatScene,RewardScene,ShopScene,RestScene,EventScene,DeckScene,GameOverScene,VictoryScene];
-const game=new Phaser.Game(config);
-window.addEventListener('resize',()=>game.scale.resize(window.innerWidth,window.innerHeight));
+try {
+  const game=new Phaser.Game(config);
+  window.addEventListener('resize',()=>game.scale.resize(window.innerWidth,window.innerHeight));
+} catch(e) {
+  console.error('Game init error:', e);
+  document.body.innerHTML='<div style="color:#fff;padding:40px;font-family:sans-serif"><h1>Error loading game</h1><p>'+e.message+'</p><pre>'+e.stack+'</pre></div>';
+}
