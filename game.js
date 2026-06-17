@@ -172,18 +172,25 @@ class BootScene extends Phaser.Scene {
     this.load.on('progress', v => { pt.setText(Math.round(v*100)+'%'); pb.clear(); pb.fillStyle(0xfbbf24,1).fillRect(w/2-155, h/2-10, 310*v, 20); });
     this.load.on('complete', () => { pb.destroy(); pbox.destroy(); pt.destroy(); });
 
-    // Load all cards from CARD_DB
-    Object.values(CARD_DB).forEach(card => {
-      if (card.art) this.load.image(card.art, 'assets/cards/' + card.art + '.png');
-    });
+    // Load only ESSENTIAL assets for faster loading
+    const essentialCards = [
+      'card_back','card_frame_gold','card_frame_silver','card_frame_bronze',
+      'W01_strike','W02_defend','W03_heavy_blow','W04_shield_bash','W05_battle_cry',
+      'BM01_fireball','BM02_ice_shard','BM03_thunder_bolt','BM06_blizzard','BM07_meteor','BM10_ultima',
+      'T01_quick_stab','T02_smoke_bomb','T03_backstab','T05_dagger_throw','T07_assassinate','T10_eternal_night',
+      'WM01_holy_light','WM02_protect','WM03_cure','WM04_smite','WM06_divine_shield','WM08_resurrection',
+      'DK01_soul_drain','DK02_dark_slash','DK03_blood_price','DK06_soul_reaver','DK08_abyssal_blade',
+      'B01_song_of_courage','B02_lullaby','B03_melody_of_healing','B04_inspire','B06_battle_hymn','B08_encore','B09_symphony','B10_eternal_song',
+      'card_fire_01','card_ice_01','card_lightning_01','card_earth_01','card_wind_01','card_holy_01','card_dark_01'
+    ];
+    essentialCards.forEach(k => this.load.image(k, 'assets/cards/' + k + '.png'));
 
-    // Load all enemies
-    Object.values(ENEMY_DB).forEach(enemy => {
-      this.load.image(enemy.sprite, 'assets/enemies/' + enemy.sprite + '.png');
-    });
+    // Load essential enemies
+    ['skeleton','slime','goblin','wolf','spider','ghost','dark_mage','golem','dark_knight','boss_dragon','boss_lich','boss_demon'
+    ].forEach(k => this.load.image(k, 'assets/enemies/' + k + '.png'));
 
     // Load backgrounds
-    ['bg_forest','bg_desert','bg_ice_cave','bg_castle','bg_netherworld'].forEach(k => this.load.image(k, 'assets/backgrounds/' + k + '.jpg'));
+    ['bg_forest','bg_desert','bg_castle'].forEach(k => this.load.image(k, 'assets/backgrounds/' + k + '.jpg'));
   }
 
   create() {

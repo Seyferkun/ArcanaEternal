@@ -116,6 +116,6 @@ const RELIC_DB = {
 };
 
 // Export for use in game.js
-if (typeof module !== 'undefined') {
-  module.exports = { CARD_DB, ENEMY_DB, RELIC_DB };
-}
+window.CARD_DB = CARD_DB;
+window.ENEMY_DB = ENEMY_DB;
+window.RELIC_DB = RELIC_DB;
