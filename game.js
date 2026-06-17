@@ -242,8 +242,7 @@ class BootScene extends Phaser.Scene {
   }
 
   create() {
-    this.cameras.main.fadeOut(300);
-    this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('MenuScene'));
+    this.scene.start('MenuScene');
   }
 }
 
